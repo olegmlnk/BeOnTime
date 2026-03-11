@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+dist/
+dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# .NET Core
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDEs and Tools
+.idea/
+.vscode/
+*.suo
+*.userprefs
+*.ideocoverage
+*.njsproj
+*.sln
+
+# OS
+.DS_Store
+Thumbs.db
+*.DS_Store
+*.local
