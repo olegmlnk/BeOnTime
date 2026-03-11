@@ -1,0 +1,6 @@
+@BeOnTime_HostAddress = http://localhost:5205
+
+GET {{BeOnTime_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

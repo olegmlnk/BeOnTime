@@ -1,0 +1,7 @@
+﻿services:
+  beontime:
+    image: beontime
+    build:
+      context: .
+      dockerfile: BeOnTime/Dockerfile
+
