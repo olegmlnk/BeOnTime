@@ -1,4 +1,4 @@
-namespace BeOnTime;
+namespace BeOnTime.Core;
 
 public class Program
 {
