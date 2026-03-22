@@ -12,6 +12,26 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy", options =>
+            {
+                options.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:5173", "https://localhost:5173");
+            });
+        });
+        
+        var securityKey = builder.Configuration.GetSection("Secret").Value ?? throw new InvalidOperationException("SecurityKey is not configured.");
+        
+        builder.Services.AddAuthentication(options =>
+        {
+            //TODO: Implement authentication
+        });
+        
+        
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -20,10 +40,11 @@ public class Program
             app.MapOpenApi();
         }
 
+        app.UseCors("CorsPolicy");
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
+        app.UseAuthentication();
 
         app.MapControllers();
 
