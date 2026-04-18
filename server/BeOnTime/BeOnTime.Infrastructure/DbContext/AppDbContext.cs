@@ -47,5 +47,20 @@ public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 
             entity.HasQueryFilter(t => t.DeletedAt == null);
         });
+
+        modelBuilder.Entity<Idea>(entity =>
+        {
+            entity.Property(i => i.Title).IsRequired().HasMaxLength(200);
+            entity.Property(i => i.Content).IsRequired().HasMaxLength(5000);
+
+            entity.HasOne(i => i.User)
+                .WithMany()
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(i => i.UserId);
+
+            entity.HasQueryFilter(i => i.DeletedAt == null);
+        });
     }
 }
