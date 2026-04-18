@@ -62,5 +62,25 @@ public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 
             entity.HasQueryFilter(i => i.DeletedAt == null);
         });
+
+        modelBuilder.Entity<Roadmap>(entity =>
+        {
+            entity.Property(r => r.Name).IsRequired().HasMaxLength(200);
+            entity.Property(r => r.Description).HasMaxLength(2000);
+
+            entity.HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(r => r.Tasks)
+                .WithOne()
+                .HasForeignKey(t => t.RoadmapId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasIndex(r => r.UserId);
+
+            entity.HasQueryFilter(r => r.DeletedAt == null);
+        });
     }
 }
