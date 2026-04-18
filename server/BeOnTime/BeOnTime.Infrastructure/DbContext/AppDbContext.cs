@@ -62,5 +62,26 @@ public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 
             entity.HasQueryFilter(i => i.DeletedAt == null);
         });
+
+        modelBuilder.Entity<Reminding>(entity =>
+        {
+            entity.Property(r => r.Message).HasMaxLength(500);
+            entity.Property(r => r.Status).HasConversion<string>().HasMaxLength(32);
+
+            entity.HasOne(r => r.Task)
+                .WithMany()
+                .HasForeignKey(r => r.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasIndex(r => new { r.Status, r.RemindAt });
+            entity.HasIndex(r => r.UserId);
+
+            entity.HasQueryFilter(r => r.DeletedAt == null);
+        });
     }
 }

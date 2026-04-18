@@ -2,6 +2,7 @@ using System.Text;
 using BeOnTime.Application.Interfaces;
 using BeOnTime.Application.Options;
 using BeOnTime.Application.Services;
+using BeOnTime.Infrastructure.BackgroundServices;
 using BeOnTime.Infrastructure.DbContext;
 using BeOnTime.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,10 +30,14 @@ public class Program
         builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         builder.Services.AddScoped<ITaskRepository, TaskRepository>();
         builder.Services.AddScoped<IIdeaRepository, IdeaRepository>();
+        builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
         builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITaskService, TaskService>();
         builder.Services.AddScoped<IIdeaService, IdeaService>();
+        builder.Services.AddScoped<IReminderService, ReminderService>();
+
+        builder.Services.AddHostedService<ReminderBackgroundService>();
 
         builder.Services.AddCors(options =>
         {
