@@ -1,19 +1,21 @@
-using BeOnTime.Core.Base;
+using System.ComponentModel.DataAnnotations;
 using BeOnTime.Core.Enums;
 
-namespace BeOnTime.Core.Entities;
+namespace BeOnTime.Application.DTOs.Tasks;
 
-public class TaskItem : BaseEntity
+public class CreateTaskDto
 {
+    [Required]
+    [MinLength(1)]
+    [MaxLength(200)]
     public string Title { get; set; } = string.Empty;
+
+    [MaxLength(2000)]
     public string? Description { get; set; }
+
     public DateTime? Deadline { get; set; }
-    public TaskItemStatus Status { get; set; } = TaskItemStatus.Todo;
+
     public TaskPriority Priority { get; set; } = TaskPriority.Medium;
 
     public Guid? RoadmapId { get; set; }
-    public int? OrderInRoadmap { get; set; }
-
-    public Guid UserId { get; set; }
-    public User? User { get; set; }
 }
