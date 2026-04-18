@@ -29,10 +29,12 @@ public class Program
         builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         builder.Services.AddScoped<ITaskRepository, TaskRepository>();
         builder.Services.AddScoped<IIdeaRepository, IdeaRepository>();
+        builder.Services.AddScoped<IRoadmapRepository, RoadmapRepository>();
         builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITaskService, TaskService>();
         builder.Services.AddScoped<IIdeaService, IdeaService>();
+        builder.Services.AddScoped<IRoadmapService, RoadmapService>();
 
         builder.Services.AddCors(options =>
         {

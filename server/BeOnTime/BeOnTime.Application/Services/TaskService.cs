@@ -1,5 +1,6 @@
 using BeOnTime.Application.DTOs.Tasks;
 using BeOnTime.Application.Interfaces;
+using BeOnTime.Application.Mapping;
 using BeOnTime.Core.Entities;
 using BeOnTime.Core.Enums;
 
@@ -17,13 +18,13 @@ public class TaskService : ITaskService
     public async Task<IReadOnlyList<TaskResponseDto>> GetAllAsync(Guid userId, TaskFilterDto filter)
     {
         var tasks = await _tasks.GetAllAsync(userId, filter);
-        return tasks.Select(Map).ToList();
+        return tasks.Select(TaskMapper.Map).ToList();
     }
 
     public async Task<TaskResponseDto?> GetByIdAsync(Guid userId, Guid id)
     {
         var task = await _tasks.GetByIdAsync(userId, id);
-        return task is null ? null : Map(task);
+        return task is null ? null : TaskMapper.Map(task);
     }
 
     public async Task<TaskResponseDto> CreateAsync(Guid userId, CreateTaskDto dto)
@@ -44,7 +45,7 @@ public class TaskService : ITaskService
         };
 
         await _tasks.CreateAsync(task);
-        return Map(task);
+        return TaskMapper.Map(task);
     }
 
     public async Task<TaskResponseDto?> UpdateAsync(Guid userId, Guid id, UpdateTaskDto dto)
@@ -61,7 +62,7 @@ public class TaskService : ITaskService
         task.UpdatedAt = DateTime.UtcNow;
 
         await _tasks.UpdateAsync(task);
-        return Map(task);
+        return TaskMapper.Map(task);
     }
 
     public async Task<TaskResponseDto?> UpdateStatusAsync(Guid userId, Guid id, TaskItemStatus status)
@@ -73,7 +74,7 @@ public class TaskService : ITaskService
         task.UpdatedAt = DateTime.UtcNow;
 
         await _tasks.UpdateAsync(task);
-        return Map(task);
+        return TaskMapper.Map(task);
     }
 
     public async Task<bool> DeleteAsync(Guid userId, Guid id)
@@ -91,27 +92,14 @@ public class TaskService : ITaskService
     public async Task<IReadOnlyList<TaskResponseDto>> GetOverdueAsync(Guid userId)
     {
         var tasks = await _tasks.GetOverdueAsync(userId);
-        return tasks.Select(Map).ToList();
+        return tasks.Select(TaskMapper.Map).ToList();
     }
 
     public async Task<IReadOnlyList<TaskResponseDto>> GetUpcomingAsync(Guid userId, int days)
     {
         if (days < 1) days = 7;
         var tasks = await _tasks.GetUpcomingAsync(userId, days);
-        return tasks.Select(Map).ToList();
+        return tasks.Select(TaskMapper.Map).ToList();
     }
 
-    private static TaskResponseDto Map(TaskItem task) => new()
-    {
-        Id = task.Id,
-        Title = task.Title,
-        Description = task.Description,
-        Deadline = task.Deadline,
-        Status = task.Status,
-        Priority = task.Priority,
-        RoadmapId = task.RoadmapId,
-        OrderInRoadmap = task.OrderInRoadmap,
-        CreatedAt = task.CreatedAt,
-        UpdatedAt = task.UpdatedAt
-    };
 }
