@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> ExistsAsync(string email, string usernname)
     {
-        return await _context.Users.AnyAsync(u => u.Email == email && u.UserName == usernname);
+        return await _context.Users.AnyAsync(u => u.Email == email || u.UserName == usernname);
     }
 
     public async Task<User> CreateAsync(User user)

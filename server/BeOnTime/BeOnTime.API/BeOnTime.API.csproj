@@ -21,6 +21,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BeOnTime.Application\BeOnTime.Application.csproj" />
+      <ProjectReference Include="..\BeOnTime.Infrastructure\BeOnTime.Infrastructure.csproj" />
+      <ProjectReference Include="..\BeOnTime.Core\BeOnTime.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>

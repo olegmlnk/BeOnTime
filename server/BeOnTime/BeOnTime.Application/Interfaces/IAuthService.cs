@@ -1,5 +1,4 @@
 using BeOnTime.Application.DTOs;
-using Microsoft.AspNetCore.Authentication;
 
 namespace BeOnTime.Application.Interfaces;
 
