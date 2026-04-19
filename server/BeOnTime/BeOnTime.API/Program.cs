@@ -2,6 +2,7 @@ using System.Text;
 using BeOnTime.Application.Interfaces;
 using BeOnTime.Application.Options;
 using BeOnTime.Application.Services;
+using BeOnTime.Infrastructure.BackgroundServices;
 using BeOnTime.Infrastructure.DbContext;
 using BeOnTime.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,11 +31,24 @@ public class Program
         builder.Services.AddScoped<ITaskRepository, TaskRepository>();
         builder.Services.AddScoped<IIdeaRepository, IdeaRepository>();
         builder.Services.AddScoped<IRoadmapRepository, RoadmapRepository>();
+        builder.Services.AddScoped<IUserSettingsRepository, UserSettingsRepository>();
+        builder.Services.AddScoped<IUserSettingsHistoryRepository, UserSettingsHistoryRepository>();
+        builder.Services.AddScoped<IUserExportJobRepository, UserExportJobRepository>();
+        builder.Services.AddScoped<IArchiveRepository, ArchiveRepository>();
+
         builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ITaskService, TaskService>();
         builder.Services.AddScoped<IIdeaService, IdeaService>();
         builder.Services.AddScoped<IRoadmapService, RoadmapService>();
+        builder.Services.AddScoped<IUserSettingsService, UserSettingsService>();
+        builder.Services.AddScoped<IProfileService, ProfileService>();
+        builder.Services.AddScoped<ISessionService, SessionService>();
+        builder.Services.AddScoped<IArchiveService, ArchiveService>();
+        builder.Services.AddScoped<IExportService, ExportService>();
+        builder.Services.AddScoped<IExportJobRunner, ExportJobRunner>();
+
+        builder.Services.AddHostedService<ExportBackgroundService>();
 
         builder.Services.AddCors(options =>
         {

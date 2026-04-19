@@ -54,13 +54,14 @@ public class JwtTokenService : IJwtTokenService
         return Convert.ToBase64String(bytes);
     }
 
-    public async Task<RefreshToken> SaveRefreshTokenAsync(User user, string refreshToken)
+    public async Task<RefreshToken> SaveRefreshTokenAsync(User user, string refreshToken, string? userAgent)
     {
         var entity = new RefreshToken
         {
             Id = Guid.NewGuid(),
             Token = refreshToken,
             UserId = user.Id,
+            UserAgent = userAgent,
             Expires = DateTime.UtcNow.AddDays(_options.RefreshTokenExpirationDays),
             IsRevoked = false,
             CreatedAt = DateTime.UtcNow,

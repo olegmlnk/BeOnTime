@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
     {
-        var result = await _authService.RegisterAsync(request);
+        var result = await _authService.RegisterAsync(request, GetUserAgent());
         if (!result.Success)
             return BadRequest(new { error = result.Error });
 
@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
-        var result = await _authService.LoginASync(request);
+        var result = await _authService.LoginASync(request, GetUserAgent());
         if (!result.Success)
             return Unauthorized(new { error = result.Error });
 
@@ -38,10 +38,16 @@ public class AuthController : ControllerBase
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequestDto request)
     {
-        var result = await _authService.RefreshTokenAsync(request);
+        var result = await _authService.RefreshTokenAsync(request, GetUserAgent());
         if (!result.Success)
             return Unauthorized(new { error = result.Error });
 
         return Ok(result.Token);
+    }
+
+    private string? GetUserAgent()
+    {
+        var ua = Request.Headers.UserAgent.ToString();
+        return string.IsNullOrWhiteSpace(ua) ? null : ua;
     }
 }

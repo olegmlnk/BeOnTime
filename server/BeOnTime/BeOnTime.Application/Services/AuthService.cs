@@ -23,7 +23,7 @@ public class AuthService : IAuthService
         _jwtOptions = jwtOptions.Value;
     }
 
-    public async Task<AuthResult> RegisterAsync(RegisterRequestDto request)
+    public async Task<AuthResult> RegisterAsync(RegisterRequestDto request, string? userAgent)
     {
         if (await _userRepository.ExistsAsync(request.Email, request.UserName))
             return AuthResult.Fail("User with this email or username already exists");
@@ -43,10 +43,10 @@ public class AuthService : IAuthService
 
         await _userRepository.CreateAsync(user);
 
-        return AuthResult.Ok(await IssueTokensAsync(user));
+        return AuthResult.Ok(await IssueTokensAsync(user, userAgent));
     }
 
-    public async Task<AuthResult> LoginASync(LoginRequestDto loginRequestDto)
+    public async Task<AuthResult> LoginASync(LoginRequestDto loginRequestDto, string? userAgent)
     {
         var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email);
         if (user is null)
@@ -55,10 +55,10 @@ public class AuthService : IAuthService
         if (!BCrypt.Net.BCrypt.Verify(loginRequestDto.Password, user.PasswordHash))
             return AuthResult.Fail("Invalid credentials");
 
-        return AuthResult.Ok(await IssueTokensAsync(user));
+        return AuthResult.Ok(await IssueTokensAsync(user, userAgent));
     }
 
-    public async Task<AuthResult> RefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto)
+    public async Task<AuthResult> RefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto, string? userAgent)
     {
         var existing = await _jwtTokenService.GetRefreshTokenAsync(refreshTokenRequestDto.RefreshToken);
         if (existing is null || existing.IsRevoked || existing.Expires < DateTime.UtcNow)
@@ -70,14 +70,14 @@ public class AuthService : IAuthService
 
         await _jwtTokenService.RevokeRefreshTokenAsync(existing);
 
-        return AuthResult.Ok(await IssueTokensAsync(user));
+        return AuthResult.Ok(await IssueTokensAsync(user, userAgent));
     }
 
-    private async Task<TokenResponseDto> IssueTokensAsync(User user)
+    private async Task<TokenResponseDto> IssueTokensAsync(User user, string? userAgent)
     {
         var accessToken = _jwtTokenService.GenerateAccessToken(user);
         var refreshToken = _jwtTokenService.GenerateRefreshToken();
-        await _jwtTokenService.SaveRefreshTokenAsync(user, refreshToken);
+        await _jwtTokenService.SaveRefreshTokenAsync(user, refreshToken, userAgent);
 
         return new TokenResponseDto
         {
