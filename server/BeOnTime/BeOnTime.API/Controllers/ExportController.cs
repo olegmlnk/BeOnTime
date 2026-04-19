@@ -22,7 +22,7 @@ public class ExportController : ControllerBase
     {
         if (!TryGetUserId(out var userId)) return Unauthorized();
         var job = await _export.EnqueueAsync(userId);
-        return Accepted(new { id = job.Id }, job);
+        return AcceptedAtAction(nameof(GetStatus), new { id = job.Id }, job);
     }
 
     [HttpGet("{id:guid}")]
