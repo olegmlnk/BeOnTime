@@ -173,5 +173,95 @@ namespace BeOnTime.Tests
             Assert.False(result.Success);
             Assert.Equal("Invalid credentials", result.Error);
         }
+
+        [Fact]
+        public async Task RefreshTokenAsync_ShouldReturnFail_WhenTokenIsExpired()
+        {
+            // 1. ARRANGE
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockJwtTokenService = new Mock<IJwtTokenService>();
+            var mockJwtOptions = new Mock<IOptions<JwtOptions>>();
+
+            // Створення фейкового об'єкта токена
+            var expiredToken = new RefreshToken 
+            { 
+                Token = "old-token",
+                Expires = DateTime.UtcNow.AddHours(-2), // Час у минулому
+                IsRevoked = false 
+                };
+
+            mockJwtTokenService
+                .Setup(s => s.GetRefreshTokenAsync(It.IsAny<string>()))
+                .ReturnsAsync(expiredToken);
+
+                var authService = new AuthService(
+                mockUserRepository.Object,
+                mockJwtTokenService.Object,
+                mockJwtOptions.Object
+            );
+
+            var request = new RefreshTokenRequestDto { RefreshToken = "old-token" };
+
+            // 2. ACT
+            var result = await authService.RefreshTokenAsync(request, "Test-Agent");
+
+            // 3. ASSERT
+             Assert.False(result.Success);
+             Assert.Equal("Invalid or expired refresh token", result.Error); 
+         }
+
+        [Fact]
+        public async Task RefreshTokenAsync_ShouldReturnSuccess_WhenTokenIsValid()
+        {
+            // 1. ARRANGE
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockJwtTokenService = new Mock<IJwtTokenService>();
+    
+            var jwtOptions = new JwtOptions { ExpirationTimeInMinutes = 15 };
+            var mockJwtOptions = new Mock<IOptions<JwtOptions>>();
+            mockJwtOptions.Setup(opt => opt.Value).Returns(jwtOptions);
+
+            var userId = Guid.NewGuid();
+            var validToken = new RefreshToken 
+            { 
+                Token = "valid-token",
+                UserId = userId,
+                Expires = DateTime.UtcNow.AddDays(1),
+                IsRevoked = false 
+            };
+
+            var user = new User { Id = userId, Email = "test@test.com" };
+
+            mockJwtTokenService
+                .Setup(s => s.GetRefreshTokenAsync("valid-token"))
+                .ReturnsAsync(validToken);
+    
+            mockUserRepository
+                .Setup(r => r.GetByIdAsync(userId))
+                .ReturnsAsync(user);
+
+            mockJwtTokenService
+                .Setup(s => s.GenerateAccessToken(It.IsAny<User>()))
+                .Returns("new-access-token");
+
+            var authService = new AuthService(
+                mockUserRepository.Object,
+                mockJwtTokenService.Object,
+                mockJwtOptions.Object
+            );
+
+            var request = new RefreshTokenRequestDto { RefreshToken = "valid-token" };
+
+            // 2. ACT
+            var result = await authService.RefreshTokenAsync(request, "Test-Agent");
+
+            // 3. ASSERT
+            Assert.True(result.Success);
+            Assert.NotNull(result.Token);
+            Assert.Equal("new-access-token", result.Token.AccessToken);
+            
+            // Перевірка виклику методу RevokeRefreshTokenAsync
+            mockJwtTokenService.Verify(s => s.RevokeRefreshTokenAsync(validToken), Times.Once);
+        }
     }
 }
