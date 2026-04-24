@@ -6,11 +6,64 @@ using BeOnTime.Application.DTOs;
 using BeOnTime.Application.Options;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using BeOnTime.Core.Entities;
 
 namespace BeOnTime.Tests
 {
     public class AuthTests
     {
+        [Fact]
+        public async Task RegisterAsync_ShouldReturnSuccess_WhenDataIsValid()
+        {
+            // 1. ARRANGE
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockJwtTokenService = new Mock<IJwtTokenService>();
+            
+            // Налаштування AuthService в конструкторі читає _jwtOptions = jwtOptions.Value
+            // Тому треба створити фейкові налаштування, щоб код не впав з помилкою
+            var jwtOptions = new JwtOptions { ExpirationTimeInMinutes = 15 };
+            var mockJwtOptions = new Mock<IOptions<JwtOptions>>();
+            mockJwtOptions.Setup(opt => opt.Value).Returns(jwtOptions);
+
+            // Налаштування БД: кажемо, що такого юзера ще НЕМАЄ (повертаємо false)
+            mockUserRepository
+                .Setup(repo => repo.ExistsAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(false);
+
+            // Налаштування генератора токенів: повертаємо зрозумілі рядки
+            mockJwtTokenService
+                .Setup(jwt => jwt.GenerateAccessToken(It.IsAny<User>()))
+                .Returns("fake-access-token");
+            mockJwtTokenService
+                .Setup(jwt => jwt.GenerateRefreshToken())
+                .Returns("fake-refresh-token");
+
+            // Створення сервісу з фейковими залежностями
+            var authService = new AuthService(
+                mockUserRepository.Object,
+                mockJwtTokenService.Object,
+                mockJwtOptions.Object
+            );
+
+            var request = new RegisterRequestDto
+            {
+                Email = "newuser@test.com",
+                UserName = "newuser",
+                Password = "ValidPassword123!"
+            };
+
+            // 2. ACT
+            var result = await authService.RegisterAsync(request, "Test-Agent");
+
+            // 3. ASSERT
+            // Перевірка чи успішна відповідь і чи згенерувався токен
+            Assert.True(result.Success);
+            Assert.NotNull(result.Token);
+            Assert.Equal("fake-access-token", result.Token.AccessToken);
+
+            // Перевірка чи викликався метод CreateAsync для БД рівно 1 раз!
+            mockUserRepository.Verify(repo => repo.CreateAsync(It.IsAny<User>()), Times.Once);
+        }
         [Fact]
         public async Task RegisterAsync_ShouldReturnFail_WhenUserAlreadyExists()
         {
