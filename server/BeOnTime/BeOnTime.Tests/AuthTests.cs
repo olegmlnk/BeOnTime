@@ -100,5 +100,78 @@ namespace BeOnTime.Tests
             Assert.False(result.Success);
             Assert.Equal("User with this email or username already exists", result.Error);
         }
+        [Fact]
+        public async Task LoginASync_ShouldReturnFail_WhenUserDoesNotExist()
+        {
+            // 1. ARRANGE
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockJwtTokenService = new Mock<IJwtTokenService>();
+            var mockJwtOptions = new Mock<IOptions<JwtOptions>>();
+
+            // Налаштовуємо БД: коли сервіс шукатиме імейл, повертаємо null (нікого не знайдено)
+            mockUserRepository
+                .Setup(repo => repo.GetByEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync((User?)null);
+
+            var authService = new AuthService(
+                mockUserRepository.Object,
+                mockJwtTokenService.Object,
+                mockJwtOptions.Object
+            );
+
+            var request = new LoginRequestDto 
+            { 
+                Email = "ghost@test.com", 
+                Password = "SomePassword123!" 
+            };
+
+            // 2. ACT
+            var result = await authService.LoginASync(request, "Test-Agent");
+
+            // 3. ASSERT
+            Assert.False(result.Success);
+            Assert.Equal("Invalid credentials", result.Error);
+        }
+
+        [Fact]
+        public async Task LoginASync_ShouldReturnFail_WhenPasswordIsIncorrect()
+        {
+            // 1. ARRANGE
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockJwtTokenService = new Mock<IJwtTokenService>();
+            var mockJwtOptions = new Mock<IOptions<JwtOptions>>();
+
+            // Створення фейкового юзера
+            var fakeUserInDb = new User 
+            { 
+                Email = "realuser@test.com", 
+                PasswordHash = "$2a$11$SomeFakeHashedPasswordString..." 
+            };
+
+            // Налаштування БД: тепер вона знаходить юзера
+            mockUserRepository
+                .Setup(repo => repo.GetByEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeUserInDb);
+
+            var authService = new AuthService(
+                mockUserRepository.Object,
+                mockJwtTokenService.Object,
+                mockJwtOptions.Object
+            );
+
+            // Клієнт вводить ПРАВИЛЬНИЙ імейл, але НЕПРАВИЛЬНИЙ пароль
+            var request = new LoginRequestDto 
+            { 
+                Email = "realuser@test.com", 
+                Password = "WrongPassword123!" 
+            };
+
+            // 2. ACT
+            var result = await authService.LoginASync(request, "Test-Agent");
+
+            // 3. ASSERT
+            Assert.False(result.Success);
+            Assert.Equal("Invalid credentials", result.Error);
+        }
     }
 }
