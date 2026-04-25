@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getTokens, setTokens, removeTokens } from './tokenStorage';
+import { getTokens, setTokens, removeTokens } from '../utils/tokenStorage';
 
 const api = axios.create({
   baseURL: '/api'

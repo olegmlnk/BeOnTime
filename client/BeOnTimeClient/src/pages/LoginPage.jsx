@@ -28,46 +28,57 @@ export const LoginPage = () => {
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="auth-title">Welcome Back</h2>
-        <p className="auth-subtitle">Sign in to your BeOnTime account</p>
-        
-        {error && <div className="auth-error">{error}</div>}
-        
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              disabled={loading}
-            />
+      <div className="auth-layout">
+        <div className="auth-form-section">
+          <div className="auth-card">
+            <h2 className="auth-title">Welcome Back</h2>
+            <p className="auth-subtitle">Sign in to your account</p>
+            
+            {error && <div className="auth-error">{error}</div>}
+            
+            <form onSubmit={handleSubmit} className="auth-form">
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  disabled={loading}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                  disabled={loading}
+                />
+              </div>
+              
+              <button type="submit" className="auth-btn" disabled={loading}>
+                {loading ? 'Signing in...' : 'Sign In'}
+              </button>
+            </form>
+            
+            <div className="auth-footer">
+              Don't have an account? <Link to="/register">Sign up here</Link>
+            </div>
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              disabled={loading}
-            />
-          </div>
-          
-          <button type="submit" className="auth-btn" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
+        </div>
         
-        <div className="auth-footer">
-          Don't have an account? <Link to="/register">Sign up</Link>
+        <div className="auth-info-section">
+          <div className="auth-info-content">
+            <h1>Stay Organized.<br/>Achieve More.</h1>
+            <p>Welcome to BeOnTime! The smartest way to manage your schedules, track your tasks, and stay on top of your daily goals without feeling overwhelmed.</p>
+          </div>
         </div>
       </div>
     </div>
