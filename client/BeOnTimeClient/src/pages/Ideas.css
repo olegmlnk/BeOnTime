@@ -1,0 +1,217 @@
+/* ── IDEAS PAGE ── */
+.ideas-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.ideas-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.ideas-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.ideas-header p {
+  color: var(--ink-60);
+  font-size: 15px;
+}
+
+/* ── QUICK INPUT FORM ── */
+.quick-input-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.quick-input-box {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(15, 14, 12, 0.08);
+  border: 1px solid var(--ink-08);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.quick-input-box.focused {
+  box-shadow: 0 8px 32px rgba(15, 14, 12, 0.12);
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.quick-input-title {
+  width: 100%;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  background: transparent;
+  outline: none;
+}
+
+.quick-input-title::placeholder {
+  font-weight: 500;
+  color: var(--ink-60);
+}
+
+.quick-input-desc {
+  width: 100%;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  background: transparent;
+  outline: none;
+  resize: none;
+  margin-top: 12px;
+  min-height: 80px;
+}
+
+.quick-input-desc::placeholder {
+  color: var(--ink-60);
+}
+
+.quick-input-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.btn-save-idea {
+  background: var(--ink);
+  color: var(--warm-white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.btn-save-idea:hover {
+  background: rgba(15, 14, 12, 0.8);
+}
+
+.btn-save-idea:disabled {
+  background: var(--ink-20);
+  cursor: not-allowed;
+}
+
+/* ── MASONRY GRID ── */
+.ideas-masonry {
+  column-count: 3;
+  column-gap: 24px;
+  padding-bottom: 40px;
+}
+
+@media (max-width: 1100px) {
+  .ideas-masonry {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .ideas-masonry {
+    column-count: 1;
+  }
+}
+
+/* ── STICKER IDEA CARD ── */
+.sticker-card {
+  break-inside: avoid;
+  margin-bottom: 24px;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(15, 14, 12, 0.05);
+  border: 1px solid rgba(15, 14, 12, 0.03);
+  position: relative;
+  transition: transform var(--transition), box-shadow var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Give them a subtle pastel background to look like sticky notes optionally */
+.sticker-card:nth-child(4n+1) { background-color: #fffaf0; border-color: #fcebd1; } /* Light gold */
+.sticker-card:nth-child(4n+2) { background-color: #f2fafa; border-color: #d1f0f0; } /* Light teal */
+.sticker-card:nth-child(4n+3) { background-color: #fff5f5; border-color: #fcdbdb; } /* Light red */
+.sticker-card:nth-child(4n+4) { background-color: #fcfcfc; border-color: var(--ink-08); } /* White */
+
+.sticker-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(15, 14, 12, 0.08);
+}
+
+.sticker-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.sticker-desc {
+  font-size: 14px;
+  color: var(--ink-60);
+  line-height: 1.5;
+  flex-grow: 1;
+  white-space: pre-wrap;
+}
+
+.sticker-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.sticker-card:hover .sticker-actions {
+  opacity: 1;
+}
+
+.btn-icon {
+  background: #fff;
+  border: 1px solid var(--ink-08);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-60);
+  transition: all var(--transition);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.btn-icon:hover {
+  color: var(--ink);
+  border-color: var(--ink-20);
+  transform: scale(1.05);
+}
+
+.btn-icon.convert:hover {
+  color: var(--teal);
+  border-color: rgba(42, 107, 107, 0.3);
+  background: rgba(42, 107, 107, 0.05);
+}
+
+.btn-icon.delete:hover {
+  color: var(--error);
+  border-color: rgba(185, 64, 64, 0.3);
+  background: rgba(185, 64, 64, 0.05);
+}

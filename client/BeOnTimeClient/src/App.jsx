@@ -5,24 +5,8 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { useAuth } from './hooks/useAuth'
 import './App.css'
-
-// Тимчасовий компонент для головної сторінки
-const Dashboard = () => {
-  const { user, logout } = useAuth();
-  return (
-    <div style={{ padding: '40px', color: '#fff', textAlign: 'center' }}>
-      <h1>Dashboard</h1>
-      <p>Welcome, {user?.name || user?.email}</p>
-      <button 
-        onClick={logout}
-        style={{ padding: '10px 20px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', marginTop: '20px' }}
-      >
-        Logout
-      </button>
-    </div>
-  );
-};
-
+import { DashboardPage } from './pages/DashboardPage'
+import { TasksPage } from './pages/TasksPage'
 function App() {
   return (
     <AuthProvider>
@@ -37,7 +21,16 @@ function App() {
             path="/" 
             element={
               <PrivateRoute>
-                <Dashboard />
+                <DashboardPage />
+              </PrivateRoute>
+            } 
+          />
+          
+          <Route 
+            path="/tasks" 
+            element={
+              <PrivateRoute>
+                <TasksPage />
               </PrivateRoute>
             } 
           />
