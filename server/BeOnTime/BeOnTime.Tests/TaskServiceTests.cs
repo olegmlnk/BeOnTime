@@ -168,5 +168,102 @@ namespace BeOnTime.Tests
             //Перевірка, чи викликався метод збереження в БД
             mockTaskRepository.Verify(repo => repo.UpdateAsync(existingTask), Times.Once); 
         }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldReturnNull_WhenTaskDoesNotExist()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            var taskId = Guid.NewGuid();
+
+            // БД каже, що завдання не знайдено
+            mockTaskRepository
+                .Setup(repo => repo.GetByIdAsync(userId, taskId))
+                .ReturnsAsync((TaskItem?)null);
+
+            var updateDto = new UpdateTaskDto { Title = "Нова назва" };
+
+            // 2. ACT
+            var result = await taskService.UpdateAsync(userId, taskId, updateDto);
+
+            // 3. ASSERT
+            Assert.Null(result);
+            mockTaskRepository.Verify(repo => repo.UpdateAsync(It.IsAny<TaskItem>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldReturnUpdatedTask_WhenTaskExists()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            var taskId = Guid.NewGuid();
+
+            // Створення старого завдання
+            var existingTask = new TaskItem
+            {
+                Id = taskId,
+                UserId = userId,
+                Title = "Стара назва",
+                Description = "Старий опис"
+            };
+
+            mockTaskRepository
+                .Setup(repo => repo.GetByIdAsync(userId, taskId))
+                .ReturnsAsync(existingTask);
+
+            // Створення DTO з новими даними
+            var updateDto = new UpdateTaskDto
+            {
+                Title = "Нова суперова назва",
+                Description = "Оновлений опис",
+                Priority = TaskPriority.High,
+                Status = TaskItemStatus.InProgress
+            };
+
+            // 2. ACT
+            var result = await taskService.UpdateAsync(userId, taskId, updateDto);
+
+            // 3. ASSERT
+            Assert.NotNull(result);
+            
+            // Перевірка, чи застосувалися нові поля до сутності
+            Assert.Equal("Нова суперова назва", existingTask.Title);
+            Assert.Equal("Оновлений опис", existingTask.Description);
+            Assert.Equal(TaskPriority.High, existingTask.Priority);
+            
+            // Перевірка, чи оновився час
+            Assert.NotNull(existingTask.UpdatedAt);
+            
+            // Перевірка виклику БД
+            mockTaskRepository.Verify(repo => repo.UpdateAsync(existingTask), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ShouldReturnNull_WhenTaskDoesNotExist()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            var taskId = Guid.NewGuid();
+
+            // Налаштування БД: нічого не знайдено
+            mockTaskRepository
+                .Setup(repo => repo.GetByIdAsync(userId, taskId))
+                .ReturnsAsync((TaskItem?)null);
+
+            // 2. ACT
+            var result = await taskService.GetByIdAsync(userId, taskId);
+
+            // 3. ASSERT
+            Assert.Null(result); 
+        }
     }
 }
