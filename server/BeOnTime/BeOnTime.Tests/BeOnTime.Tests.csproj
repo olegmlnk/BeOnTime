@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BeOnTime.Application\BeOnTime.Application.csproj" />
+    <ProjectReference Include="..\BeOnTime.API\BeOnTime.API.csproj" />
   </ItemGroup>
 
 </Project>
