@@ -265,5 +265,83 @@ namespace BeOnTime.Tests
             // 3. ASSERT
             Assert.Null(result); 
         }
+
+        [Fact]
+        public async Task GetAllAsync_ShouldReturnMappedTasks()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            var filter = new TaskFilterDto(); // Пустий фільтр
+            
+            var taskList = new List<TaskItem>
+            {
+                new TaskItem { Id = Guid.NewGuid(), UserId = userId, Title = "Таска 1" },
+                new TaskItem { Id = Guid.NewGuid(), UserId = userId, Title = "Таска 2" }
+            };
+
+            mockTaskRepository
+                .Setup(repo => repo.GetAllAsync(userId, filter))
+                .ReturnsAsync(taskList);
+
+            // 2. ACT
+            var result = await taskService.GetAllAsync(userId, filter);
+
+            // 3. ASSERT
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count); // Перевірка, чи повернулися обидві таски
+            Assert.Equal("Таска 1", result[0].Title); // Перевірка, чи відпрацював маппінг
+        }
+
+        [Fact]
+        public async Task GetOverdueAsync_ShouldReturnMappedTasks()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            var overdueTasks = new List<TaskItem>
+            {
+                new TaskItem { Id = Guid.NewGuid(), UserId = userId, Title = "Прострочена таска", Deadline = DateTime.UtcNow.AddDays(-1) }
+            };
+
+            mockTaskRepository
+                .Setup(repo => repo.GetOverdueAsync(userId))
+                .ReturnsAsync(overdueTasks);
+
+            // 2. ACT
+            var result = await taskService.GetOverdueAsync(userId);
+
+            // 3. ASSERT
+            Assert.NotNull(result);
+            Assert.Single(result); // Assert.Single перевіряє, що в списку рівно 1 елемент
+            Assert.Equal("Прострочена таска", result[0].Title);
+        }
+
+        [Fact]
+        public async Task GetUpcomingAsync_ShouldUse7Days_WhenRequestedDaysIsLessThanOne()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            
+            // Налаштування заглушки повертає пустий список для будь-якої кількості днів
+            mockTaskRepository
+                .Setup(repo => repo.GetUpcomingAsync(userId, It.IsAny<int>()))
+                .ReturnsAsync(new List<TaskItem>());
+
+            // 2. ACT
+            // Передача 0 днів (що менше за 1)
+            await taskService.GetUpcomingAsync(userId, 0);
+
+            // 3. ASSERT
+            // Перевірка, чи сервіс викликав репозиторій з цифрою 7
+            mockTaskRepository.Verify(repo => repo.GetUpcomingAsync(userId, 7), Times.Once);
+        }
     }
 }
