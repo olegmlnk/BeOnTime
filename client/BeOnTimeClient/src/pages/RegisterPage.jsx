@@ -69,7 +69,25 @@ export const RegisterPage = () => {
       setSuccess('Акаунт створено! Перенаправлення...');
       setTimeout(() => navigate('/'), 1400);
     } catch (err) {
-      setError(err.response?.data?.error || 'Помилка реєстрації. Спробуйте ще раз.');
+      let errorMessage = 'Помилка реєстрації. Спробуйте ще раз.';
+      if (err.response?.data) {
+        if (err.response.data.error) {
+          errorMessage = err.response.data.error;
+        } else if (err.response.data.errors) {
+          const firstErrorKey = Object.keys(err.response.data.errors)[0];
+          errorMessage = err.response.data.errors[firstErrorKey][0];
+        } else if (err.response.data.title) {
+        errorMessage = err.response.data.title;
+        } else if (typeof err.response.data === 'string') {
+          errorMessage = err.response.data.includes('<html') 
+            ? 'Сервер не відповідає (можливо, бекенд вимкнений).' 
+            : err.response.data;
+        }
+      } else if (err.message) {
+        errorMessage = `Помилка: ${err.message}`;
+      }
+      console.error('Registration Error:', err);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
