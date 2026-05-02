@@ -99,13 +99,74 @@ namespace BeOnTime.Tests
             var result = await taskService.DeleteAsync(userId, taskId);
 
             // 3. ASSERT
-            Assert.True(result); // Має повернути true
+            Assert.True(result); 
             
             // Перевірка, чи був проставлений час видалення
             Assert.NotNull(existingTask.DeletedAt);
             
             // Перевірка, чи сервіс передав команду БД на збереження цих змін
-            mockTaskRepository.Verify(repo => repo.UpdateAsync(existingTask), Times.Once); //
+            mockTaskRepository.Verify(repo => repo.UpdateAsync(existingTask), Times.Once); 
+        }
+
+        [Fact]
+        public async Task UpdateStatusAsync_ShouldReturnNull_WhenTaskDoesNotExist()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            var taskId = Guid.NewGuid();
+
+            mockTaskRepository
+                .Setup(repo => repo.GetByIdAsync(userId, taskId))
+                .ReturnsAsync((TaskItem?)null); // БД нічого не знайшла
+
+            // 2. ACT
+            var result = await taskService.UpdateStatusAsync(userId, taskId, TaskItemStatus.Done);
+
+            // 3. ASSERT
+            Assert.Null(result); 
+            mockTaskRepository.Verify(repo => repo.UpdateAsync(It.IsAny<TaskItem>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateStatusAsync_ShouldReturnUpdatedTask_WhenTaskExists()
+        {
+            // 1. ARRANGE
+            var mockTaskRepository = new Mock<ITaskRepository>();
+            var taskService = new TaskService(mockTaskRepository.Object);
+
+            var userId = Guid.NewGuid();
+            var taskId = Guid.NewGuid();
+
+            //Створення завдання, яке зараз має статус Todo
+            var existingTask = new TaskItem
+            {
+                Id = taskId,
+                UserId = userId,
+                Status = TaskItemStatus.Todo
+            };
+
+            mockTaskRepository
+                .Setup(repo => repo.GetByIdAsync(userId, taskId))
+                .ReturnsAsync(existingTask);
+
+            // 2. ACT
+            // Користувач переводить статус у "В процесі" (InProgress)
+            var result = await taskService.UpdateStatusAsync(userId, taskId, TaskItemStatus.InProgress);
+
+            // 3. ASSERT
+            Assert.NotNull(result);
+            
+            // Перевірка, чи змінився статус у самій сутності
+            Assert.Equal(TaskItemStatus.InProgress, existingTask.Status);
+            
+            //Перевірка, чи оновився час
+            Assert.NotNull(existingTask.UpdatedAt);
+            
+            //Перевірка, чи викликався метод збереження в БД
+            mockTaskRepository.Verify(repo => repo.UpdateAsync(existingTask), Times.Once); 
         }
     }
 }
