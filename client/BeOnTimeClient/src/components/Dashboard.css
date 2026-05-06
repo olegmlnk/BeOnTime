@@ -33,6 +33,15 @@
   color: rgba(250, 248, 244, 0.6);
   font-weight: 500;
   transition: background var(--transition), color var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .nav-item:hover {

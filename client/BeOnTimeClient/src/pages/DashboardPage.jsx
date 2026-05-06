@@ -11,6 +11,7 @@ export const DashboardPage = () => {
   const [tasks, setTasks] = useState([]);
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMockData, setIsMockData] = useState(false);
 
   // Function to load actual data from API or set fallback
   useEffect(() => {
@@ -23,19 +24,21 @@ export const DashboardPage = () => {
         
         setTasks(tasksData || []);
         setIdeas(ideasData || []);
+        setIsMockData(false);
       } catch (error) {
         console.warn('Backend API not reachable or returned error, using mock data for UI layout display.');
+        setIsMockData(true);
         
         // Mock data matching backend entities for UI demonstration
         setTasks([
-          { id: '1', title: 'Finish Quarterly Report', deadline: new Date(Date.now() + 86400000).toISOString(), status: 0, priority: 2 },
-          { id: '2', title: 'Team Meeting Prep', deadline: new Date(Date.now() + 172800000).toISOString(), status: 0, priority: 1 },
-          { id: '3', title: 'Review PRs', deadline: new Date().toISOString(), status: 2, priority: 0 },
+          { id: 'c3d4e5f6-0001-4000-8000-000000000001', title: 'Finish Quarterly Report', deadline: new Date(Date.now() + 86400000).toISOString(), status: 0, priority: 2 },
+          { id: 'c3d4e5f6-0001-4000-8000-000000000002', title: 'Team Meeting Prep', deadline: new Date(Date.now() + 172800000).toISOString(), status: 0, priority: 1 },
+          { id: 'c3d4e5f6-0001-4000-8000-000000000003', title: 'Review PRs', deadline: new Date().toISOString(), status: 2, priority: 0 },
         ]);
         
         setIdeas([
-          { id: '1', title: 'New landing page concept', description: 'Use more animations on scroll' },
-          { id: '2', title: 'Blog post ideas', description: 'Write about time management techniques' },
+          { id: 'c3d4e5f6-0002-4000-8000-000000000001', title: 'New landing page concept', description: 'Use more animations on scroll' },
+          { id: 'c3d4e5f6-0002-4000-8000-000000000002', title: 'Blog post ideas', description: 'Write about time management techniques' },
         ]);
       } finally {
         setLoading(false);
@@ -52,6 +55,7 @@ export const DashboardPage = () => {
     setTasks(prev => prev.map(t => t.id === task.id ? { ...t, status: newStatus } : t));
     
     try {
+      if (isMockData) return; // skip backend for mock data
       await taskService.updateStatus(task.id, newStatus);
     } catch (err) {
       // Revert if failed
@@ -66,11 +70,12 @@ export const DashboardPage = () => {
       e.target.value = ''; // clear input
       
       try {
+        if (isMockData) throw new Error('mock mode');
         const newIdea = await ideaService.create({ title: newTitle });
         setIdeas([newIdea, ...ideas]);
       } catch (err) {
-        console.warn('Failed to save idea to backend, adding mock to UI', err);
-        setIdeas([{ id: Date.now().toString(), title: newTitle }, ...ideas]);
+        if (!isMockData) console.warn('Failed to save idea to backend, adding mock to UI', err);
+        setIdeas([{ id: crypto.randomUUID(), title: newTitle }, ...ideas]);
       }
     }
   };
