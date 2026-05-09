@@ -1,46 +1,33 @@
-import axios from 'axios';
-import { getTokens } from '../utils/tokenStorage';
-
-const api = axios.create({
-  baseURL: '/api/roadmaps',
-});
-
-api.interceptors.request.use((config) => {
-  const { accessToken } = getTokens();
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-  return config;
-});
+import apiClient from './apiClient';
 
 export const roadmapService = {
   getAll: async () => {
-    const response = await api.get('/');
+    const response = await apiClient.get('/roadmaps');
     return response.data;
   },
 
   getById: async (id) => {
-    const response = await api.get(`/${id}`);
+    const response = await apiClient.get(`/roadmaps/${id}`);
     return response.data;
   },
 
   create: async (data) => {
-    const response = await api.post('/', data);
+    const response = await apiClient.post('/roadmaps', data);
     return response.data;
   },
 
   update: async (id, data) => {
-    const response = await api.put(`/${id}`, data);
+    const response = await apiClient.put(`/roadmaps/${id}`, data);
     return response.data;
   },
 
   delete: async (id) => {
-    const response = await api.delete(`/${id}`);
+    const response = await apiClient.delete(`/roadmaps/${id}`);
     return response.data;
   },
 
   reorder: async (id, taskIds) => {
-    const response = await api.put(`/${id}/reorder`, { taskIds });
+    const response = await apiClient.put(`/roadmaps/${id}/reorder`, { taskIds });
     return response.data;
   },
 };

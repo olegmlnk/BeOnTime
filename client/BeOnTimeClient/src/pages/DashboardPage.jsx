@@ -37,8 +37,8 @@ export const DashboardPage = () => {
         ]);
         
         setIdeas([
-          { id: 'c3d4e5f6-0002-4000-8000-000000000001', title: 'New landing page concept', description: 'Use more animations on scroll' },
-          { id: 'c3d4e5f6-0002-4000-8000-000000000002', title: 'Blog post ideas', description: 'Write about time management techniques' },
+          { id: 'c3d4e5f6-0002-4000-8000-000000000001', title: 'New landing page concept', content: 'Use more animations on scroll' },
+          { id: 'c3d4e5f6-0002-4000-8000-000000000002', title: 'Blog post ideas', content: 'Write about time management techniques' },
         ]);
       } finally {
         setLoading(false);
@@ -71,7 +71,7 @@ export const DashboardPage = () => {
       
       try {
         if (isMockData) throw new Error('mock mode');
-        const newIdea = await ideaService.create({ title: newTitle });
+        const newIdea = await ideaService.create({ title: newTitle, content: ' ' });
         setIdeas([newIdea, ...ideas]);
       } catch (err) {
         if (!isMockData) console.warn('Failed to save idea to backend, adding mock to UI', err);

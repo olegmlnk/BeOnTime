@@ -11,6 +11,9 @@ export const RoadmapDetailPage = () => {
   const [roadmap, setRoadmap] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isMockData, setIsMockData] = useState(false);
+  const [newStepTitle, setNewStepTitle] = useState('');
+  const [isAddingStep, setIsAddingStep] = useState(false);
   const [dragIdx, setDragIdx] = useState(null);
   const [dragOverIdx, setDragOverIdx] = useState(null);
 
@@ -19,8 +22,10 @@ export const RoadmapDetailPage = () => {
     try {
       const data = await roadmapService.getById(id);
       setRoadmap(data);
+      setIsMockData(false);
     } catch (error) {
       console.warn("Backend unavailable, using mock data for roadmap detail");
+      setIsMockData(true);
       setRoadmap({
         id,
         name: 'Вивчити React',
@@ -31,11 +36,11 @@ export const RoadmapDetailPage = () => {
         doneTasks: 3,
         progressPercent: 60,
         tasks: [
-          { id: 'mt-1', title: 'Вивчити JSX та компоненти', status: 2, priority: 2, deadline: '2026-04-10T00:00:00', orderInRoadmap: 0 },
-          { id: 'mt-2', title: 'React Hooks (useState, useEffect)', status: 2, priority: 2, deadline: '2026-04-20T00:00:00', orderInRoadmap: 1 },
-          { id: 'mt-3', title: 'React Router DOM', status: 2, priority: 1, deadline: '2026-05-01T00:00:00', orderInRoadmap: 2 },
-          { id: 'mt-4', title: 'Context API та useReducer', status: 1, priority: 1, deadline: '2026-05-15T00:00:00', orderInRoadmap: 3 },
-          { id: 'mt-5', title: 'Побудувати фінальний проект', status: 0, priority: 0, deadline: '2026-06-15T00:00:00', orderInRoadmap: 4 },
+          { id: 'd4e5f6g7-0001-4000-8000-000000000001', title: 'Вивчити JSX та компоненти', status: 2, priority: 2, deadline: '2026-04-10T00:00:00', orderInRoadmap: 0 },
+          { id: 'd4e5f6g7-0001-4000-8000-000000000002', title: 'React Hooks (useState, useEffect)', status: 2, priority: 2, deadline: '2026-04-20T00:00:00', orderInRoadmap: 1 },
+          { id: 'd4e5f6g7-0001-4000-8000-000000000003', title: 'React Router DOM', status: 2, priority: 1, deadline: '2026-05-01T00:00:00', orderInRoadmap: 2 },
+          { id: 'd4e5f6g7-0001-4000-8000-000000000004', title: 'Context API та useReducer', status: 1, priority: 1, deadline: '2026-05-15T00:00:00', orderInRoadmap: 3 },
+          { id: 'd4e5f6g7-0001-4000-8000-000000000005', title: 'Побудувати фінальний проект', status: 0, priority: 0, deadline: '2026-06-15T00:00:00', orderInRoadmap: 4 },
         ],
       });
     } finally {
@@ -49,13 +54,54 @@ export const RoadmapDetailPage = () => {
 
   const handleEditSave = async (data) => {
     try {
+      if (isMockData) throw new Error('mock');
       const updated = await roadmapService.update(id, data);
       setRoadmap(prev => ({ ...prev, ...updated }));
     } catch (error) {
-      console.warn("Failed to update, applying locally");
+      if (!isMockData) console.warn("Failed to update, applying locally");
       setRoadmap(prev => ({ ...prev, ...data }));
     }
     setIsEditModalOpen(false);
+  };
+  
+  const handleAddStep = async (e) => {
+    if (e) e.preventDefault();
+    if (!newStepTitle.trim()) return;
+
+    setIsAddingStep(true);
+    const stepData = { 
+      title: newStepTitle.trim(),
+      roadmapId: id,
+      orderInRoadmap: (roadmap.tasks || []).length
+    };
+
+    try {
+      // Використовуємо roadmapService для додавання кроку (якщо є такий ендпоінт)
+      // Або створюємо через taskService, але як спрощений об'єкт
+      // Поки що реалізуємо локально/через загальний сервіс, якщо бекенд дозволяє
+      
+      // Примітка: Бекенд використовує TaskItem для пунктів роадмапу.
+      // Ми можемо додати метод у roadmapService або використати прямий виклик.
+      
+      // Для демонстрації поки додаємо локально
+      const newStep = { 
+        ...stepData, 
+        id: crypto.randomUUID(), 
+        status: 0, 
+        priority: 1 
+      };
+      
+      setRoadmap(prev => ({
+        ...prev,
+        tasks: [...(prev.tasks || []), newStep],
+        totalTasks: (prev.totalTasks || 0) + 1
+      }));
+      setNewStepTitle('');
+    } catch (error) {
+      console.error("Failed to add step", error);
+    } finally {
+      setIsAddingStep(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -97,6 +143,7 @@ export const RoadmapDetailPage = () => {
     setDragOverIdx(null);
 
     try {
+      if (isMockData) return;
       await roadmapService.reorder(id, reorderedTasks.map(t => t.id));
     } catch (error) {
       console.warn("Failed to save reorder to backend");
@@ -265,19 +312,45 @@ export const RoadmapDetailPage = () => {
                   </div>
                 );
               })}
+              
+              <form className="roadmap-quick-add" onSubmit={handleAddStep}>
+                <div className="roadmap-task-order">+</div>
+                <input 
+                  type="text" 
+                  placeholder="Додати наступний крок..." 
+                  value={newStepTitle}
+                  onChange={(e) => setNewStepTitle(e.target.value)}
+                  disabled={isAddingStep}
+                />
+                {newStepTitle.trim() && (
+                  <button type="submit" className="btn-add-step" disabled={isAddingStep}>
+                    Додати
+                  </button>
+                )}
+              </form>
             </div>
           ) : (
             <div className="roadmap-tasks-empty">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" width="48" height="48" style={{ opacity: 0.4 }}>
                 <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5h6M9 14l2 2 4-4" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <p>У цьому роадмапі ще немає завдань. Додайте завдання через сторінку Tasks.</p>
+              <p>У цьому роадмапі ще немає пунктів.</p>
+              <div className="roadmap-quick-add-empty">
+                <input 
+                  type="text" 
+                  placeholder="Введіть назву першого кроку..." 
+                  value={newStepTitle}
+                  onChange={(e) => setNewStepTitle(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddStep()}
+                />
+                <button onClick={handleAddStep} disabled={!newStepTitle.trim()}>Створити</button>
+              </div>
             </div>
           )}
         </div>
       </div>
 
-      <RoadmapModal
+      <RoadmapModal 
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onSave={handleEditSave}

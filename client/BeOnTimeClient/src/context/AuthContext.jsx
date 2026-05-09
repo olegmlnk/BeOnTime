@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
 import { authService } from '../services/authService';
-import { getTokens } from '../utils/tokenStorage';
+import { getTokens, setTokens } from '../utils/tokenStorage';
 import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext(null);
@@ -10,27 +11,46 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Перевіряємо токен при завантаженні додатку
-    const { accessToken } = getTokens();
-    if (accessToken) {
-      try {
-        const decoded = jwtDecode(accessToken);
-        // Перевіряємо чи токен не прострочений (exp в секундах, Date.now() в мілісекундах)
-        if (decoded.exp * 1000 > Date.now()) {
-          setUser({
-            id: decoded.sub || decoded.nameid,
-            email: decoded.email,
-            name: decoded.name || decoded.unique_name
-          });
-        } else {
+    const initAuth = async () => {
+      const { accessToken, refreshToken } = getTokens();
+      if (accessToken) {
+        try {
+          const decoded = jwtDecode(accessToken);
+          // Перевіряємо чи токен не прострочений (exp в секундах, Date.now() в мілісекундах)
+          if (decoded.exp * 1000 > Date.now()) {
+            setUser({
+              id: decoded.sub || decoded.nameid,
+              email: decoded.email,
+              name: decoded.name || decoded.unique_name
+            });
+          } else if (refreshToken) {
+            // Access token expired but refresh token exists — try to refresh
+            try {
+              const response = await axios.post('/api/auth/refresh', { refreshToken });
+              const { accessToken: newAccess, refreshToken: newRefresh } = response.data;
+              setTokens(newAccess, newRefresh);
+              const newDecoded = jwtDecode(newAccess);
+              setUser({
+                id: newDecoded.sub || newDecoded.nameid,
+                email: newDecoded.email,
+                name: newDecoded.name || newDecoded.unique_name
+              });
+            } catch (refreshError) {
+              console.warn("Refresh token expired, logging out", refreshError);
+              authService.logout();
+            }
+          } else {
+            authService.logout();
+          }
+        } catch (error) {
+          console.error("Invalid token format", error);
           authService.logout();
         }
-      } catch (error) {
-        console.error("Invalid token format", error);
-        authService.logout();
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    };
+
+    initAuth();
   }, []);
 
   const login = async (email, password) => {
@@ -46,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.warn("Backend unavailable or error occurred, using mock login.", error);
       const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZXhwIjo5OTk5OTk5OTk5fQ.mock_signature";
-      import('../utils/tokenStorage').then(m => m.setTokens(fakeToken, fakeToken));
+      setTokens(fakeToken, fakeToken);
       setUser({ id: '123', email, name: email.split('@')[0] });
       return { accessToken: fakeToken };
     }
@@ -67,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.warn("Backend unavailable or error occurred, using mock register.", error);
       const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZXhwIjo5OTk5OTk5OTk5fQ.mock_signature";
-      import('../utils/tokenStorage').then(m => m.setTokens(fakeToken, fakeToken));
+      setTokens(fakeToken, fakeToken);
       setUser({ id: '123', email, name: userName });
       return { accessToken: fakeToken };
     }

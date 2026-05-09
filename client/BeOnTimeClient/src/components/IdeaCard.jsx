@@ -2,7 +2,7 @@ export const IdeaCard = ({ idea, onConvert, onDelete }) => {
   return (
     <div className="sticker-card">
       <h4 className="sticker-title">{idea.title}</h4>
-      {idea.description && <p className="sticker-desc">{idea.description}</p>}
+      {idea.content && <p className="sticker-desc">{idea.content}</p>}
       
       {(onConvert || onDelete) && (
         <div className="sticker-actions">

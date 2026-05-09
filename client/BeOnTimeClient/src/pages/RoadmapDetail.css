@@ -91,6 +91,33 @@
   background: rgba(185, 64, 64, 0.05);
 }
 
+.btn-new-roadmap-task {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--teal);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  transition: all var(--transition);
+  box-shadow: 0 4px 12px rgba(45, 122, 79, 0.15);
+}
+
+.btn-new-roadmap-task:hover {
+  background: var(--teal-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(45, 122, 79, 0.25);
+}
+
+.btn-new-roadmap-task:active {
+  transform: translateY(0);
+}
+
 .roadmap-detail-desc {
   color: var(--ink-60);
   font-size: 15px;
@@ -270,17 +297,86 @@
   color: var(--error);
 }
 
-/* ── EMPTY TASKS STATE ── */
-.roadmap-tasks-empty {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--ink-60);
-  background: rgba(15, 14, 12, 0.02);
-  border-radius: var(--radius);
-  border: 1px dashed var(--ink-08);
+/* ── QUICK ADD STEP ── */
+.roadmap-quick-add {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(15, 14, 12, 0.01);
+  border: 1px dashed var(--ink-10);
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+  transition: all var(--transition);
 }
 
-.roadmap-tasks-empty p {
+.roadmap-quick-add:focus-within {
+  background: #fff;
+  border-color: var(--teal);
+  box-shadow: 0 4px 12px rgba(45, 122, 79, 0.08);
+}
+
+.roadmap-quick-add input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
   font-size: 15px;
-  margin-top: 12px;
+  color: var(--ink);
+}
+
+.btn-add-step {
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-add-step:hover {
+  background: var(--teal-dark);
+}
+
+.roadmap-quick-add-empty {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.roadmap-quick-add-empty input {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--ink-10);
+  outline: none;
+  font-size: 14px;
+}
+
+.roadmap-quick-add-empty input:focus {
+  border-color: var(--teal);
+}
+
+.roadmap-quick-add-empty button {
+  padding: 10px 20px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.roadmap-quick-add-empty button:disabled {
+  background: var(--ink-10);
+  cursor: not-allowed;
 }
