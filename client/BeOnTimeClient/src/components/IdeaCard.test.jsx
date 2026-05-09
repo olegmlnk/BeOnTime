@@ -8,6 +8,7 @@ describe('IdeaCard Component', () => {
         id: '1',
         title: 'Test Idea',
         description: 'Some description',
+        content: 'Some description',
     };
 
     it('повинен рендерити заголовок ідеї', () => {

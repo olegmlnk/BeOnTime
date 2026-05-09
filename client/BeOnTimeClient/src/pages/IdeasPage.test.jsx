@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { IdeasPage } from './IdeasPage';
 import { AuthContext } from '../context/AuthContext';
+import { ThemeContext } from '../context/ThemeContext';
 import { BrowserRouter } from 'react-router-dom';
 
 // Мокаємо сервіс ідей
@@ -27,9 +28,11 @@ describe('IdeasPage Component', () => {
     const renderWithProviders = () => {
         return render(
             <BrowserRouter>
-                <AuthContext.Provider value={{ user: mockUser, login: vi.fn(), logout: vi.fn(), register: vi.fn(), isLoading: false }}>
-                    <IdeasPage />
-                </AuthContext.Provider>
+                <ThemeContext.Provider value={{ theme: 'light', toggleTheme: vi.fn() }}>
+                    <AuthContext.Provider value={{ user: mockUser, login: vi.fn(), logout: vi.fn(), register: vi.fn(), isLoading: false }}>
+                        <IdeasPage />
+                    </AuthContext.Provider>
+                </ThemeContext.Provider>
             </BrowserRouter>
         );
     };
@@ -103,7 +106,7 @@ describe('IdeasPage Component', () => {
         await user.type(screen.getByPlaceholderText(/Додайте деталі/i), 'Details');
         await user.click(screen.getByText('Зберегти'));
 
-        expect(ideaService.create).toHaveBeenCalledWith({ title: 'New Idea', description: 'Details' });
+        expect(ideaService.create).toHaveBeenCalledWith({ title: 'New Idea', content: 'Details' });
     });
 
     it('повинен не зберігати ідею з порожнім заголовком', async () => {

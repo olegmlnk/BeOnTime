@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { RegisterPage } from './RegisterPage';
 import { AuthContext } from '../context/AuthContext';
+import { ThemeContext } from '../context/ThemeContext';
 import { BrowserRouter } from 'react-router-dom';
 
 // Мок роутера
@@ -26,9 +27,11 @@ describe('RegisterPage Component', () => {
     const renderWithProviders = () => {
         return render(
             <BrowserRouter>
-                <AuthContext.Provider value={{ register: mockRegister }}>
-                    <RegisterPage />
-                </AuthContext.Provider>
+                <ThemeContext.Provider value={{ theme: 'light', toggleTheme: vi.fn() }}>
+                    <AuthContext.Provider value={{ register: mockRegister }}>
+                        <RegisterPage />
+                    </AuthContext.Provider>
+                </ThemeContext.Provider>
             </BrowserRouter>
         );
     };

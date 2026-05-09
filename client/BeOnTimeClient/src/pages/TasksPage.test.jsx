@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TasksPage } from './TasksPage';
 import { AuthContext } from '../context/AuthContext';
+import { ThemeContext } from '../context/ThemeContext';
 import { BrowserRouter } from 'react-router-dom';
 
 // Мокаємо сервіс завдань
@@ -28,9 +29,11 @@ describe('TasksPage Component', () => {
     const renderWithProviders = () => {
         return render(
             <BrowserRouter>
-                <AuthContext.Provider value={{ user: mockUser, login: vi.fn(), logout: vi.fn(), register: vi.fn(), isLoading: false }}>
-                    <TasksPage />
-                </AuthContext.Provider>
+                <ThemeContext.Provider value={{ theme: 'light', toggleTheme: vi.fn() }}>
+                    <AuthContext.Provider value={{ user: mockUser, login: vi.fn(), logout: vi.fn(), register: vi.fn(), isLoading: false }}>
+                        <TasksPage />
+                    </AuthContext.Provider>
+                </ThemeContext.Provider>
             </BrowserRouter>
         );
     };
