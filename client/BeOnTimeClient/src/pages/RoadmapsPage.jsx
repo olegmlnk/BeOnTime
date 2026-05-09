@@ -122,7 +122,7 @@ export const RoadmapsPage = () => {
         </div>
 
         {loading ? (
-          <p style={{ textAlign: 'center', color: 'var(--ink-60)' }}>Завантаження роадмапів...</p>
+          <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>Завантаження роадмапів...</p>
         ) : roadmaps.length > 0 ? (
           <div className="roadmaps-grid">
             {roadmaps.map(roadmap => (

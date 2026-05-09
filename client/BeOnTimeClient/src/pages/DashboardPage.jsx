@@ -84,10 +84,10 @@ export const DashboardPage = () => {
 
   const getPriorityInfo = (priority) => {
     switch (priority) {
-      case 2: return { label: 'Високий', color: 'var(--error)', bg: 'rgba(185, 64, 64, 0.1)' };
-      case 1: return { label: 'Середній', color: 'var(--gold)', bg: 'rgba(200, 149, 60, 0.15)' };
-      case 0: return { label: 'Низький', color: 'var(--teal)', bg: 'rgba(42, 107, 107, 0.1)' };
-      default: return { label: '', color: 'var(--ink-60)', bg: 'var(--ink-08)' };
+      case 2: return { label: 'Високий', color: 'var(--error)', bg: 'var(--error-pale)' };
+      case 1: return { label: 'Середній', color: 'var(--warning)', bg: 'var(--warning-pale)' };
+      case 0: return { label: 'Низький', color: 'var(--cyan)', bg: 'var(--cyan-pale)' };
+      default: return { label: '', color: 'var(--text-secondary)', bg: 'var(--border)' };
     }
   };
 
@@ -95,7 +95,7 @@ export const DashboardPage = () => {
     return (
       <DashboardLayout>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-          <p style={{ color: 'var(--ink-60)', fontSize: '15px' }}>Завантаження...</p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>Завантаження...</p>
         </div>
       </DashboardLayout>
     );
@@ -123,8 +123,8 @@ export const DashboardPage = () => {
       {/* Stats Cards */}
       <div className="dash-stats">
         <div className="stat-card" onClick={() => navigate('/tasks')}>
-          <div className="stat-icon" style={{ background: 'rgba(200, 149, 60, 0.12)' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" width="22" height="22">
+          <div className="stat-icon" style={{ background: 'var(--accent-pale)' }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" width="22" height="22">
               <rect x="3" y="3" width="18" height="18" rx="2" />
               <path d="M3 9h18M9 21V9" strokeLinecap="round" />
             </svg>
@@ -136,8 +136,8 @@ export const DashboardPage = () => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'rgba(42, 107, 107, 0.1)' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" strokeWidth="2" width="22" height="22">
+          <div className="stat-icon" style={{ background: 'var(--cyan-pale)' }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" strokeWidth="2" width="22" height="22">
               <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
               <path d="M12 6v6l4 2" strokeLinecap="round" />
             </svg>
@@ -149,8 +149,8 @@ export const DashboardPage = () => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'rgba(45, 122, 79, 0.1)' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--success, #2d7a4f)" strokeWidth="2" width="22" height="22">
+          <div className="stat-icon" style={{ background: 'var(--success-pale)' }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2" width="22" height="22">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" strokeLinecap="round" />
               <path d="M22 4L12 14.01l-3-3" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -162,8 +162,8 @@ export const DashboardPage = () => {
         </div>
 
         <div className="stat-card" onClick={() => navigate('/ideas')}>
-          <div className="stat-icon" style={{ background: 'rgba(200, 149, 60, 0.08)' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" width="22" height="22">
+          <div className="stat-icon" style={{ background: 'var(--warning-pale)' }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" strokeWidth="2" width="22" height="22">
               <path d="M9 21H15M12 18V21M12 3C8.68629 3 6 5.68629 6 9C6 11.0827 7.0583 12.9069 8.65342 14C9.44498 14.5422 10 15.4206 10 16.4V18H14V16.4C14 15.4206 14.555 14.5422 15.3466 14C16.9417 12.9069 18 11.0827 18 9C18 5.68629 15.3137 3 12 3Z" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>

@@ -13,21 +13,24 @@
 }
 
 .roadmaps-header h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 32px;
-  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .btn-new-roadmap {
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--ink);
-  color: var(--warm-white);
-  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent), var(--cyan) 30%));
+  color: #fff;
+  padding: 11px 20px;
   border-radius: var(--radius-sm);
   border: none;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
   font-family: inherit;
   cursor: pointer;
   transition: transform var(--transition), box-shadow var(--transition);
@@ -35,7 +38,7 @@
 
 .btn-new-roadmap:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 14, 12, 0.2);
+  box-shadow: var(--shadow-accent);
 }
 
 /* ── ROADMAP GRID ── */
@@ -48,13 +51,13 @@
 
 /* ── ROADMAP CARD ── */
 .roadmap-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: var(--radius);
   padding: 24px;
-  box-shadow: var(--shadow-card);
-  border: 1px solid rgba(15, 14, 12, 0.04);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
   cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -63,7 +66,8 @@
 
 .roadmap-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(15, 14, 12, 0.1);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-glow);
 }
 
 .roadmap-card-header {
@@ -73,9 +77,10 @@
 }
 
 .roadmap-card-title {
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  font-size: 18px;
-  color: var(--ink);
+  font-size: 17px;
+  color: var(--text-primary);
   line-height: 1.3;
   flex: 1;
   padding-right: 8px;
@@ -83,7 +88,7 @@
 
 .roadmap-card-desc {
   font-size: 14px;
-  color: var(--ink-60);
+  color: var(--text-secondary);
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -101,14 +106,14 @@
 .roadmap-progress-bar-bg {
   width: 100%;
   height: 8px;
-  background-color: var(--ink-08);
+  background-color: var(--border);
   border-radius: 100px;
   overflow: hidden;
 }
 
 .roadmap-progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--teal), var(--teal-light));
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
   border-radius: 100px;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 0;
@@ -123,12 +128,12 @@
 .roadmap-progress-text {
   font-size: 14px;
   font-weight: 600;
-  color: var(--teal);
+  color: var(--accent);
 }
 
 .roadmap-task-count {
   font-size: 12px;
-  color: var(--ink-60);
+  color: var(--text-secondary);
 }
 
 /* ── CARD FOOTER DATES ── */
@@ -136,7 +141,7 @@
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  border-top: 1px solid var(--ink-08);
+  border-top: 1px solid var(--divider);
   padding-top: 12px;
 }
 
@@ -145,19 +150,19 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: var(--ink-60);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 .roadmap-date.target {
-  color: var(--gold);
+  color: var(--cyan);
 }
 
 /* ── EMPTY STATE ── */
 .roadmaps-empty {
   text-align: center;
   margin-top: 80px;
-  color: var(--ink-60);
+  color: var(--text-secondary);
 }
 
 .roadmaps-empty svg {

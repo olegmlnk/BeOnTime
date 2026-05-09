@@ -127,7 +127,7 @@ export const ProfilePage = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <p style={{ textAlign: 'center', color: 'var(--ink-60)', paddingTop: '80px' }}>Завантаження профілю...</p>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', paddingTop: '80px' }}>Завантаження профілю...</p>
       </DashboardLayout>
     );
   }

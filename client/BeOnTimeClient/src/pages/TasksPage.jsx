@@ -118,9 +118,9 @@ export const TasksPage = () => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 2: return 'var(--error)';
-      case 1: return 'var(--gold)';
-      case 0: return 'var(--teal)';
-      default: return 'var(--ink-60)';
+      case 1: return 'var(--warning)';
+      case 0: return 'var(--cyan)';
+      default: return 'var(--text-secondary)';
     }
   };
 
@@ -180,12 +180,12 @@ export const TasksPage = () => {
                       <div className="kanban-card-footer">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: getPriorityColor(task.priority) }} />
-                          <span style={{ fontSize: '12px', color: 'var(--ink-60)', fontWeight: '500' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
                             {task.priority === 2 ? 'High' : task.priority === 1 ? 'Med' : 'Low'}
                           </span>
                         </div>
                         {task.deadline && (
-                          <span style={{ fontSize: '12px', color: 'var(--ink-60)' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                             {new Date(task.deadline).toLocaleDateString('uk-UA')}
                           </span>
                         )}

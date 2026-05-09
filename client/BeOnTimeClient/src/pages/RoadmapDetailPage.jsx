@@ -205,9 +205,9 @@ export const RoadmapDetailPage = () => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 2: return 'var(--error)';
-      case 1: return 'var(--gold)';
-      case 0: return 'var(--teal)';
-      default: return 'var(--ink-60)';
+      case 1: return 'var(--warning)';
+      case 0: return 'var(--cyan)';
+      default: return 'var(--text-secondary)';
     }
   };
 
@@ -219,7 +219,7 @@ export const RoadmapDetailPage = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <p style={{ textAlign: 'center', color: 'var(--ink-60)', paddingTop: '80px' }}>Завантаження...</p>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', paddingTop: '80px' }}>Завантаження...</p>
       </DashboardLayout>
     );
   }
@@ -227,7 +227,7 @@ export const RoadmapDetailPage = () => {
   if (!roadmap) {
     return (
       <DashboardLayout>
-        <p style={{ textAlign: 'center', color: 'var(--ink-60)', paddingTop: '80px' }}>Роадмап не знайдено.</p>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', paddingTop: '80px' }}>Роадмап не знайдено.</p>
       </DashboardLayout>
     );
   }
@@ -244,7 +244,7 @@ export const RoadmapDetailPage = () => {
               <path d="M19 12H5M12 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <h1 style={{ fontSize: '14px', color: 'var(--ink-60)', fontWeight: 500 }}>Роадмапи</h1>
+          <h1 style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 500 }}>Роадмапи</h1>
         </div>
 
         <div className="roadmap-detail-header">
@@ -347,12 +347,12 @@ export const RoadmapDetailPage = () => {
                         <span className={`status-badge ${statusInfo.className}`}>{statusInfo.label}</span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: getPriorityColor(task.priority) }} />
-                          <span style={{ fontSize: '11px', color: 'var(--ink-60)', fontWeight: 500 }}>
+                          <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 500 }}>
                             {task.priority === 2 ? 'High' : task.priority === 1 ? 'Med' : 'Low'}
                           </span>
                         </div>
                         {task.deadline && (
-                          <span style={{ fontSize: '11px', color: 'var(--ink-60)' }}>
+                          <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
                             {formatDate(task.deadline)}
                           </span>
                         )}

@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { ThemeToggle } from './ThemeToggle';
 import './Dashboard.css';
 
 export const Sidebar = () => {
@@ -64,13 +65,14 @@ export const Sidebar = () => {
       <div className="brand">
         <div className="brand-icon">
           <svg viewBox="0 0 22 22" fill="none">
-            <circle cx="11" cy="11" r="9" stroke="#0f0e0c" strokeWidth="2" />
-            <line x1="11" y1="5" x2="11" y2="11.5" stroke="#0f0e0c" strokeWidth="2" strokeLinecap="round" />
-            <line x1="11" y1="11.5" x2="14.5" y2="14.5" stroke="#0f0e0c" strokeWidth="2" strokeLinecap="round" />
-            <circle cx="11" cy="11" r="1.5" fill="#0f0e0c" />
+            <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="2" />
+            <line x1="11" y1="5" x2="11" y2="11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <line x1="11" y1="11.5" x2="14.5" y2="14.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="11" cy="11" r="1.5" fill="currentColor" />
           </svg>
         </div>
         <span className="brand-name">BeOnTime</span>
+        <ThemeToggle className="brand-theme-toggle" />
       </div>
 
       <nav className="sidebar-nav">

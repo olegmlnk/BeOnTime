@@ -159,7 +159,7 @@ export const IdeasPage = () => {
 
         <div style={{ marginTop: '48px' }}>
           {loading ? (
-            <p style={{ textAlign: 'center', color: 'var(--ink-60)' }}>Завантаження ідей...</p>
+            <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>Завантаження ідей...</p>
           ) : ideas.length > 0 ? (
             <div className="ideas-masonry">
               {ideas.map(idea => (
@@ -172,7 +172,7 @@ export const IdeasPage = () => {
               ))}
             </div>
           ) : (
-            <div style={{ textAlign: 'center', marginTop: '64px', color: 'var(--ink-60)' }}>
+            <div style={{ textAlign: 'center', marginTop: '64px', color: 'var(--text-secondary)' }}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" width="48" height="48" style={{ marginBottom: '16px', opacity: 0.5 }}>
                 <path d="M9 21H15M12 18V21M12 3C8.68629 3 6 5.68629 6 9C6 11.0827 7.0583 12.9069 8.65342 14C9.44498 14.5422 10 15.4206 10 16.4V18H14V16.4C14 15.4206 14.555 14.5422 15.3466 14C16.9417 12.9069 18 11.0827 18 9C18 5.68629 15.3137 3 12 3Z" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

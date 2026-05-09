@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle';
 import '../pages/AuthPages.css';
 
 export const AuthLayout = ({ children }) => {
@@ -11,18 +12,18 @@ export const AuthLayout = ({ children }) => {
       {/* ── LEFT ── */}
       <div className="panel-left">
         <div className="deco-circles">
-          <div className="deco-c" style={{ width: '200px', height: '200px', top: '30%', left: '-60px', borderColor: 'rgba(200,149,60,0.1)' }}></div>
-          <div className="deco-c" style={{ width: '120px', height: '120px', top: '55%', right: '20px', borderColor: 'rgba(42,107,107,0.15)' }}></div>
-          <div className="deco-c" style={{ width: '60px', height: '60px', top: '20%', right: '60px', borderColor: 'rgba(200,149,60,0.12)' }}></div>
+          <div className="deco-c" style={{ width: '200px', height: '200px', top: '30%', left: '-60px', borderColor: 'rgba(108,92,231,0.12)' }}></div>
+          <div className="deco-c" style={{ width: '120px', height: '120px', top: '55%', right: '20px', borderColor: 'rgba(0,206,201,0.15)' }}></div>
+          <div className="deco-c" style={{ width: '60px', height: '60px', top: '20%', right: '60px', borderColor: 'rgba(108,92,231,0.1)' }}></div>
         </div>
 
         <div className="brand">
           <div className="brand-icon">
             <svg viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="11" r="9" stroke="#0f0e0c" strokeWidth="2" />
-              <line x1="11" y1="5" x2="11" y2="11.5" stroke="#0f0e0c" strokeWidth="2" strokeLinecap="round" />
-              <line x1="11" y1="11.5" x2="14.5" y2="14.5" stroke="#0f0e0c" strokeWidth="2" strokeLinecap="round" />
-              <circle cx="11" cy="11" r="1.5" fill="#0f0e0c" />
+              <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="2" />
+              <line x1="11" y1="5" x2="11" y2="11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <line x1="11" y1="11.5" x2="14.5" y2="14.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="11" cy="11" r="1.5" fill="currentColor" />
             </svg>
           </div>
           <span className="brand-name">BeOnTime</span>
@@ -37,9 +38,9 @@ export const AuthLayout = ({ children }) => {
           <div className="feature-item">
             <div className="feature-dot">
               <svg viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="3" width="12" height="11" rx="2" stroke="#c8953c" strokeWidth="1.5" />
-                <path d="M5 1v3M11 1v3" stroke="#c8953c" strokeWidth="1.5" strokeLinecap="round" />
-                <path d="M5 8h6M5 11h4" stroke="#c8953c" strokeWidth="1.5" strokeLinecap="round" />
+                <rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M5 1v3M11 1v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M5 8h6M5 11h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </div>
             <div className="feature-text">
@@ -51,8 +52,8 @@ export const AuthLayout = ({ children }) => {
           <div className="feature-item">
             <div className="feature-dot">
               <svg viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="5.5" stroke="#c8953c" strokeWidth="1.5" />
-                <path d="M8 5v3.5l2.5 1.5" stroke="#c8953c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M8 5v3.5l2.5 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
             <div className="feature-text">
@@ -64,7 +65,7 @@ export const AuthLayout = ({ children }) => {
           <div className="feature-item">
             <div className="feature-dot">
               <svg viewBox="0 0 16 16" fill="none">
-                <path d="M3 8l3 3 7-7" stroke="#c8953c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3 8l3 3 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
             <div className="feature-text">
@@ -82,6 +83,9 @@ export const AuthLayout = ({ children }) => {
 
       {/* ── RIGHT ── */}
       <div className="panel-right">
+        <div className="auth-top-bar">
+          <ThemeToggle />
+        </div>
         <div className="auth-card">
           <div className="tab-switcher">
             <button
