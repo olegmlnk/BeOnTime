@@ -221,6 +221,42 @@
   flex-shrink: 0;
 }
 
+/* ── STEP CHECK BUTTON ── */
+.step-check-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-20);
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  padding: 0;
+  color: transparent;
+}
+
+.step-check-btn:hover {
+  border-color: var(--teal);
+  background: rgba(45, 122, 79, 0.08);
+  transform: scale(1.1);
+}
+
+.step-check-btn.checked {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(45, 122, 79, 0.25);
+}
+
+.step-check-btn.checked:hover {
+  background: var(--teal-dark, #1e6b47);
+  border-color: var(--teal-dark, #1e6b47);
+  transform: scale(1.1);
+}
+
 .drag-handle {
   display: flex;
   flex-direction: column;

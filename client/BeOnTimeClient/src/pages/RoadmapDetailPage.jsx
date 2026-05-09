@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { RoadmapModal } from '../components/RoadmapModal';
 import { roadmapService } from '../services/roadmapService';
+import { taskService } from '../services/taskService';
 import './RoadmapDetail.css';
 
 export const RoadmapDetailPage = () => {
@@ -69,38 +70,74 @@ export const RoadmapDetailPage = () => {
     if (!newStepTitle.trim()) return;
 
     setIsAddingStep(true);
-    const stepData = { 
+    const taskData = { 
       title: newStepTitle.trim(),
       roadmapId: id,
-      orderInRoadmap: (roadmap.tasks || []).length
+      priority: 1 // Medium
     };
 
     try {
-      // Використовуємо roadmapService для додавання кроку (якщо є такий ендпоінт)
-      // Або створюємо через taskService, але як спрощений об'єкт
-      // Поки що реалізуємо локально/через загальний сервіс, якщо бекенд дозволяє
-      
-      // Примітка: Бекенд використовує TaskItem для пунктів роадмапу.
-      // Ми можемо додати метод у roadmapService або використати прямий виклик.
-      
-      // Для демонстрації поки додаємо локально
+      if (isMockData) throw new Error('mock');
+      // Create a real task with roadmapId via the tasks API
+      await taskService.create(taskData);
+      // Refresh roadmap data to get updated tasks list and progress
+      await fetchRoadmap();
+      setNewStepTitle('');
+    } catch (error) {
+      if (!isMockData) console.warn("Failed to add step to backend", error);
+      // Fallback: add locally for mock/demo mode
       const newStep = { 
-        ...stepData, 
+        ...taskData, 
         id: crypto.randomUUID(), 
         status: 0, 
-        priority: 1 
+        orderInRoadmap: (roadmap.tasks || []).length
       };
-      
       setRoadmap(prev => ({
         ...prev,
         tasks: [...(prev.tasks || []), newStep],
         totalTasks: (prev.totalTasks || 0) + 1
       }));
       setNewStepTitle('');
-    } catch (error) {
-      console.error("Failed to add step", error);
     } finally {
       setIsAddingStep(false);
+    }
+  };
+
+  const handleToggleStep = async (task) => {
+    const newStatus = task.status === 2 ? 0 : 2; // Toggle between Done(2) and Todo(0)
+    
+    // Optimistic UI update
+    setRoadmap(prev => {
+      const updatedTasks = (prev.tasks || []).map(t =>
+        t.id === task.id ? { ...t, status: newStatus } : t
+      );
+      const doneTasks = updatedTasks.filter(t => t.status === 2).length;
+      return {
+        ...prev,
+        tasks: updatedTasks,
+        doneTasks,
+        progressPercent: updatedTasks.length > 0 ? Math.round((doneTasks / updatedTasks.length) * 100) : 0
+      };
+    });
+
+    try {
+      if (isMockData) return;
+      await taskService.updateStatus(task.id, newStatus);
+    } catch (error) {
+      console.warn("Failed to update step status, reverting", error);
+      // Revert on failure
+      setRoadmap(prev => {
+        const revertedTasks = (prev.tasks || []).map(t =>
+          t.id === task.id ? { ...t, status: task.status } : t
+        );
+        const doneTasks = revertedTasks.filter(t => t.status === 2).length;
+        return {
+          ...prev,
+          tasks: revertedTasks,
+          doneTasks,
+          progressPercent: revertedTasks.length > 0 ? Math.round((doneTasks / revertedTasks.length) * 100) : 0
+        };
+      });
     }
   };
 
@@ -287,6 +324,18 @@ export const RoadmapDetailPage = () => {
                     <div className="drag-handle" title="Перетягніть для зміни порядку">
                       <span /><span /><span />
                     </div>
+
+                    <button 
+                      className={`step-check-btn${task.status === 2 ? ' checked' : ''}`}
+                      onClick={() => handleToggleStep(task)}
+                      title={task.status === 2 ? 'Повернути в To Do' : 'Позначити виконаним'}
+                    >
+                      {task.status === 2 && (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" width="14" height="14">
+                          <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </button>
 
                     <span className="roadmap-task-order">{idx + 1}</span>
 
