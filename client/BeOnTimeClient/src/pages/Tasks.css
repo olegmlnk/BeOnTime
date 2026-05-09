@@ -13,21 +13,24 @@
 }
 
 .tasks-header h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 32px;
-  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .btn-new-task {
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--ink);
-  color: var(--warm-white);
-  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent), var(--cyan) 30%));
+  color: #fff;
+  padding: 11px 20px;
   border-radius: var(--radius-sm);
   border: none;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
   font-family: inherit;
   cursor: pointer;
   transition: transform var(--transition), box-shadow var(--transition);
@@ -35,12 +38,12 @@
 
 .btn-new-task:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 14, 12, 0.2);
+  box-shadow: var(--shadow-accent);
 }
 
 .kanban-board {
   display: flex;
-  gap: 24px;
+  gap: 20px;
   flex: 1;
   overflow-x: auto;
   padding-bottom: 24px;
@@ -48,15 +51,16 @@
 
 .kanban-column {
   flex: 1;
-  min-width: 300px;
+  min-width: 280px;
   max-width: 450px;
-  background-color: rgba(15, 14, 12, 0.02);
+  background: var(--bg-tertiary);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  border: 1px dashed var(--ink-08);
+  gap: 14px;
+  border: 1px solid var(--border);
+  transition: background var(--transition-slow);
 }
 
 .column-header {
@@ -64,41 +68,44 @@
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
-  color: var(--ink);
-  font-size: 16px;
-  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 15px;
+  margin-bottom: 4px;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .column-count {
-  background-color: var(--ink-08);
-  padding: 2px 8px;
+  background: var(--accent-pale);
+  color: var(--accent);
+  padding: 2px 9px;
   border-radius: 12px;
   font-size: 12px;
-  color: var(--ink-60);
+  font-weight: 600;
 }
 
 .kanban-column-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   min-height: 100px;
 }
 
 /* ── KANBAN CARD ── */
 .kanban-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: var(--radius-sm);
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(15, 14, 12, 0.04);
-  border: 1px solid rgba(15, 14, 12, 0.05);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
   cursor: grab;
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   position: relative;
 }
 
 .kanban-card:hover {
-  box-shadow: 0 4px 16px rgba(15, 14, 12, 0.08);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+  border-color: var(--accent-glow);
 }
 
 .kanban-card:active {
@@ -107,15 +114,15 @@
 
 .kanban-card-title {
   font-weight: 600;
-  font-size: 15px;
-  color: var(--ink);
+  font-size: 14px;
+  color: var(--text-primary);
   margin-bottom: 6px;
-  padding-right: 24px; /* space for actions */
+  padding-right: 24px;
 }
 
 .kanban-card-desc {
   font-size: 13px;
-  color: var(--ink-60);
+  color: var(--text-secondary);
   line-height: 1.4;
   margin-bottom: 12px;
   display: -webkit-box;
@@ -128,7 +135,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid var(--ink-08);
+  border-top: 1px solid var(--divider);
   padding-top: 12px;
 }
 
@@ -143,7 +150,7 @@
 .card-action-btn {
   background: transparent;
   border: none;
-  color: var(--ink-20);
+  color: var(--text-muted);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -154,21 +161,22 @@
 }
 
 .card-action-btn:hover {
-  color: var(--ink);
-  background: var(--ink-08);
+  color: var(--text-primary);
+  background: var(--border);
 }
 
 .card-action-btn.delete:hover {
   color: var(--error);
-  background: rgba(185, 64, 64, 0.1);
+  background: var(--error-pale);
 }
 
 /* ── MODAL ── */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(15, 14, 12, 0.4);
-  backdrop-filter: blur(4px);
+  background-color: var(--modal-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,12 +186,13 @@
 }
 
 .modal-content {
-  background: #fff;
+  background: var(--bg-secondary);
   border-radius: var(--radius);
   width: 100%;
   max-width: 500px;
   padding: 32px;
-  box-shadow: 0 20px 40px rgba(15, 14, 12, 0.15);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border);
   transform: translateY(20px) scale(0.95);
   opacity: 0;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -197,15 +206,16 @@
 }
 
 .modal-header h2 {
-  font-size: 24px;
-  font-family: 'DM Serif Display', serif;
-  color: var(--ink);
+  font-size: 22px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .close-btn {
   background: transparent;
   border: none;
-  color: var(--ink-60);
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
@@ -213,8 +223,8 @@
 }
 
 .close-btn:hover {
-  background: var(--ink-08);
-  color: var(--ink);
+  background: var(--border);
+  color: var(--text-primary);
 }
 
 .modal-form {
@@ -232,19 +242,19 @@
 .form-group label {
   font-size: 14px;
   font-weight: 500;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 .form-input, .form-textarea, .form-select {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid var(--ink-20);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 14px;
-  color: var(--ink);
+  color: var(--text-primary);
   transition: border-color var(--transition), box-shadow var(--transition);
-  background: #fff;
+  background: var(--input-bg);
 }
 
 .form-textarea {
@@ -254,8 +264,8 @@
 
 .form-input:focus, .form-textarea:focus, .form-select:focus {
   outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(200, 149, 60, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 .modal-footer {
@@ -268,16 +278,30 @@
 .btn-secondary {
   padding: 12px 20px;
   background: transparent;
-  border: 1px solid var(--ink-20);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   font-weight: 500;
-  color: var(--ink);
+  color: var(--text-primary);
   cursor: pointer;
   transition: background var(--transition);
+  font-family: inherit;
 }
 
 .btn-secondary:hover {
-  background: var(--ink-08);
+  background: var(--border);
+}
+
+.modal-footer .btn-primary {
+  width: auto;
+  height: auto;
+  padding: 12px 20px;
+}
+
+.modal-footer .btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 @keyframes fadeIn {

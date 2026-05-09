@@ -30,6 +30,8 @@ public class TaskRepository : ITaskRepository
             query = query.Where(t => t.Deadline <= filter.DeadlineTo.Value);
         if (filter.RoadmapId.HasValue)
             query = query.Where(t => t.RoadmapId == filter.RoadmapId.Value);
+        else
+            query = query.Where(t => t.RoadmapId == null); // Exclude roadmap steps from general task list
 
         return await query.OrderByDescending(t => t.CreatedAt).ToListAsync();
     }
@@ -55,6 +57,7 @@ public class TaskRepository : ITaskRepository
         var now = DateTime.UtcNow;
         return await _context.Tasks.AsNoTracking()
             .Where(t => t.UserId == userId
+                        && t.RoadmapId == null // Exclude roadmap steps
                         && t.Deadline != null
                         && t.Deadline < now
                         && t.Status != TaskItemStatus.Done
@@ -69,6 +72,7 @@ public class TaskRepository : ITaskRepository
         var upperBound = now.AddDays(days);
         return await _context.Tasks.AsNoTracking()
             .Where(t => t.UserId == userId
+                        && t.RoadmapId == null // Exclude roadmap steps
                         && t.Deadline != null
                         && t.Deadline >= now
                         && t.Deadline <= upperBound

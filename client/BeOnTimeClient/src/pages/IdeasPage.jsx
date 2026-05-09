@@ -7,6 +7,7 @@ import './Ideas.css';
 export const IdeasPage = () => {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMockData, setIsMockData] = useState(false);
   
   // Quick Input State
   const [isInputExpanded, setIsInputExpanded] = useState(false);
@@ -21,14 +22,16 @@ export const IdeasPage = () => {
     try {
       const data = await ideaService.getAll();
       setIdeas(data || []);
+      setIsMockData(false);
     } catch (error) {
       console.warn("Backend unavailable, using mock data for ideas page");
+      setIsMockData(true);
       setIdeas([
-        { id: '1', title: 'New landing page concept', description: 'Use more animations on scroll. Maybe a parallax effect for the hero section.' },
-        { id: '2', title: 'Blog post ideas', description: '- Time management techniques\n- How to use Kanban effectively\n- Pomodoro for developers' },
-        { id: '3', title: 'Refactor AuthContext', description: 'Need to clean up the error handling logic' },
-        { id: '4', title: 'Marketing campaign', description: 'Target students before exam week' },
-        { id: '5', title: 'Fix mobile layout', description: '' },
+        { id: 'a1b2c3d4-0001-4000-8000-000000000001', title: 'New landing page concept', content: 'Use more animations on scroll. Maybe a parallax effect for the hero section.' },
+        { id: 'a1b2c3d4-0001-4000-8000-000000000002', title: 'Blog post ideas', content: '- Time management techniques\n- How to use Kanban effectively\n- Pomodoro for developers' },
+        { id: 'a1b2c3d4-0001-4000-8000-000000000003', title: 'Refactor AuthContext', content: 'Need to clean up the error handling logic' },
+        { id: 'a1b2c3d4-0001-4000-8000-000000000004', title: 'Marketing campaign', content: 'Target students before exam week' },
+        { id: 'a1b2c3d4-0001-4000-8000-000000000005', title: 'Fix mobile layout', content: '' },
       ]);
     } finally {
       setLoading(false);
@@ -58,14 +61,15 @@ export const IdeasPage = () => {
     }
     
     setIsSaving(true);
-    const newIdeaObj = { title: newTitle.trim(), description: newDesc.trim() || null };
+    const newIdeaObj = { title: newTitle.trim(), content: newDesc.trim() || ' ' };
     
     try {
+      if (isMockData) throw new Error('mock mode');
       const createdIdea = await ideaService.create(newIdeaObj);
       setIdeas(prev => [createdIdea, ...prev]);
     } catch (error) {
-      console.warn("Failed to save idea to backend, adding locally");
-      setIdeas(prev => [{ ...newIdeaObj, id: Date.now().toString() }, ...prev]);
+      if (!isMockData) console.warn("Failed to save idea to backend, adding locally");
+      setIdeas(prev => [{ ...newIdeaObj, id: Date.now().toString(), content: newIdeaObj.content }, ...prev]);
     } finally {
       setIsSaving(false);
       setNewTitle('');
@@ -83,25 +87,27 @@ export const IdeasPage = () => {
   const handleDeleteIdea = async (id) => {
     if (!window.confirm('Видалити цю ідею?')) return;
     try {
+      if (isMockData) throw new Error('mock mode');
       await ideaService.delete(id);
       setIdeas(prev => prev.filter(i => i.id !== id));
     } catch (error) {
-      console.warn("Failed to delete from backend, applying locally");
+      if (!isMockData) console.warn("Failed to delete from backend, applying locally");
       setIdeas(prev => prev.filter(i => i.id !== id));
     }
   };
 
   const handleConvertToTask = async (idea) => {
     try {
+      if (isMockData) throw new Error('mock mode');
       await ideaService.convertToTask(idea.id);
       // Remove from ideas list (it moved to tasks)
       setIdeas(prev => prev.filter(i => i.id !== idea.id));
       // Optionally show a toast notification here
       alert(`Ідея "${idea.title}" перетворена на завдання! Шукайте її на дошці Tasks.`);
     } catch (error) {
-      console.warn("Conversion failed, applying mock conversion");
+      if (!isMockData) console.warn("Conversion failed, applying mock conversion");
       setIdeas(prev => prev.filter(i => i.id !== idea.id));
-      alert(`[МOК] Ідея "${idea.title}" перетворена на завдання!`);
+      alert(`${isMockData ? '[МОК] ' : ''}Ідея "${idea.title}" перетворена на завдання!`);
     }
   };
 
@@ -153,7 +159,7 @@ export const IdeasPage = () => {
 
         <div style={{ marginTop: '48px' }}>
           {loading ? (
-            <p style={{ textAlign: 'center', color: 'var(--ink-60)' }}>Завантаження ідей...</p>
+            <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>Завантаження ідей...</p>
           ) : ideas.length > 0 ? (
             <div className="ideas-masonry">
               {ideas.map(idea => (
@@ -166,7 +172,7 @@ export const IdeasPage = () => {
               ))}
             </div>
           ) : (
-            <div style={{ textAlign: 'center', marginTop: '64px', color: 'var(--ink-60)' }}>
+            <div style={{ textAlign: 'center', marginTop: '64px', color: 'var(--text-secondary)' }}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" width="48" height="48" style={{ marginBottom: '16px', opacity: 0.5 }}>
                 <path d="M9 21H15M12 18V21M12 3C8.68629 3 6 5.68629 6 9C6 11.0827 7.0583 12.9069 8.65342 14C9.44498 14.5422 10 15.4206 10 16.4V18H14V16.4C14 15.4206 14.555 14.5422 15.3466 14C16.9417 12.9069 18 11.0827 18 9C18 5.68629 15.3137 3 12 3Z" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

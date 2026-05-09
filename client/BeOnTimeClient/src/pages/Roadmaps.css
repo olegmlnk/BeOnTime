@@ -1,0 +1,175 @@
+/* ── ROADMAPS PAGE ── */
+.roadmaps-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.roadmaps-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.roadmaps-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.btn-new-roadmap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent), var(--cyan) 30%));
+  color: #fff;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.btn-new-roadmap:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent);
+}
+
+/* ── ROADMAP GRID ── */
+.roadmaps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+/* ── ROADMAP CARD ── */
+.roadmap-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.roadmap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-glow);
+}
+
+.roadmap-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.roadmap-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text-primary);
+  line-height: 1.3;
+  flex: 1;
+  padding-right: 8px;
+}
+
+.roadmap-card-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── PROGRESS BAR ── */
+.roadmap-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.roadmap-progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.roadmap-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  border-radius: 100px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0;
+}
+
+.roadmap-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roadmap-progress-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.roadmap-task-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ── CARD FOOTER DATES ── */
+.roadmap-card-footer {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--divider);
+  padding-top: 12px;
+}
+
+.roadmap-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.roadmap-date.target {
+  color: var(--cyan);
+}
+
+/* ── EMPTY STATE ── */
+.roadmaps-empty {
+  text-align: center;
+  margin-top: 80px;
+  color: var(--text-secondary);
+}
+
+.roadmaps-empty svg {
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.roadmaps-empty p {
+  font-size: 15px;
+}

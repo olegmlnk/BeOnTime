@@ -7,6 +7,7 @@ import './Tasks.css';
 export const TasksPage = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMockData, setIsMockData] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
 
@@ -22,13 +23,15 @@ export const TasksPage = () => {
     try {
       const data = await taskService.getAll();
       setTasks(data || []);
+      setIsMockData(false);
     } catch (error) {
       console.warn("Backend unavailable, using mock data for tasks page");
+      setIsMockData(true);
       setTasks([
-        { id: '1', title: 'Finish Quarterly Report', description: 'Include Q3 metrics', status: 0, priority: 2 },
-        { id: '2', title: 'Update homepage design', description: 'Use new color tokens', status: 1, priority: 1 },
-        { id: '3', title: 'Review PRs', status: 2, priority: 0 },
-        { id: '4', title: 'Team Sync', status: 0, priority: 1 },
+        { id: 'b2c3d4e5-0001-4000-8000-000000000001', title: 'Finish Quarterly Report', description: 'Include Q3 metrics', status: 0, priority: 2 },
+        { id: 'b2c3d4e5-0001-4000-8000-000000000002', title: 'Update homepage design', description: 'Use new color tokens', status: 1, priority: 1 },
+        { id: 'b2c3d4e5-0001-4000-8000-000000000003', title: 'Review PRs', status: 2, priority: 0 },
+        { id: 'b2c3d4e5-0001-4000-8000-000000000004', title: 'Team Sync', status: 0, priority: 1 },
       ]);
     } finally {
       setLoading(false);
@@ -41,6 +44,7 @@ export const TasksPage = () => {
 
   const handleSaveTask = async (taskData) => {
     try {
+      if (isMockData) throw new Error('mock mode');
       if (taskData.id) {
         // Edit existing
         await taskService.update(taskData.id, taskData);
@@ -51,7 +55,7 @@ export const TasksPage = () => {
         setTasks(prev => [...prev, newTask]);
       }
     } catch (error) {
-      console.warn("Failed to save to backend, applying locally");
+      if (!isMockData) console.warn("Failed to save to backend, applying locally");
       if (taskData.id) {
         setTasks(prev => prev.map(t => t.id === taskData.id ? { ...t, ...taskData } : t));
       } else {
@@ -64,10 +68,11 @@ export const TasksPage = () => {
   const handleDeleteTask = async (id) => {
     if (!window.confirm('Ви впевнені, що хочете видалити це завдання?')) return;
     try {
+      if (isMockData) throw new Error('mock mode');
       await taskService.delete(id);
       setTasks(prev => prev.filter(t => t.id !== id));
     } catch (error) {
-      console.warn("Failed to delete from backend, applying locally");
+      if (!isMockData) console.warn("Failed to delete from backend, applying locally");
       setTasks(prev => prev.filter(t => t.id !== id));
     }
   };
@@ -88,6 +93,7 @@ export const TasksPage = () => {
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status: newStatus } : t));
 
     try {
+      if (isMockData) return; // skip backend for mock data
       await taskService.updateStatus(taskId, newStatus);
     } catch (error) {
       console.warn("Status update failed, reverting...");
@@ -112,9 +118,9 @@ export const TasksPage = () => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 2: return 'var(--error)';
-      case 1: return 'var(--gold)';
-      case 0: return 'var(--teal)';
-      default: return 'var(--ink-60)';
+      case 1: return 'var(--warning)';
+      case 0: return 'var(--cyan)';
+      default: return 'var(--text-secondary)';
     }
   };
 
@@ -174,12 +180,12 @@ export const TasksPage = () => {
                       <div className="kanban-card-footer">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: getPriorityColor(task.priority) }} />
-                          <span style={{ fontSize: '12px', color: 'var(--ink-60)', fontWeight: '500' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
                             {task.priority === 2 ? 'High' : task.priority === 1 ? 'Med' : 'Low'}
                           </span>
                         </div>
                         {task.deadline && (
-                          <span style={{ fontSize: '12px', color: 'var(--ink-60)' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                             {new Date(task.deadline).toLocaleDateString('uk-UA')}
                           </span>
                         )}
