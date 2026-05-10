@@ -1,8 +1,23 @@
 services:
+  frontend:
+    image: beontime-frontend
+    build:
+      context: ./client/BeOnTimeClient
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+    depends_on:
+      - beontime
+    restart: unless-stopped
+
   beontime:
     image: beontime
     build:
-      context: .
+      context: ./server/BeOnTime
       dockerfile: BeOnTime.API/Dockerfile
     ports:
       - "5205:8080"
@@ -15,6 +30,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
 
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -31,6 +47,15 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: unless-stopped
 
 volumes:
   sqldata:

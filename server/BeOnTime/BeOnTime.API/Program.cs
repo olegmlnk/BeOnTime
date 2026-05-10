@@ -57,7 +57,7 @@ public class Program
                 policy.AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:5173", "https://localhost:5173");
+                    .SetIsOriginAllowed(_ => true);
             });
         });
 
@@ -97,7 +97,6 @@ public class Program
         }
 
         app.UseCors("CorsPolicy");
-        app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();
