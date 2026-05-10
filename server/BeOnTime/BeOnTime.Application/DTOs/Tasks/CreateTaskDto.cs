@@ -17,5 +17,7 @@ public class CreateTaskDto
 
     public TaskPriority Priority { get; set; } = TaskPriority.Medium;
 
+    public TaskItemStatus Status { get; set; } = TaskItemStatus.Todo;
+
     public Guid? RoadmapId { get; set; }
 }

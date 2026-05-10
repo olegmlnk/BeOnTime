@@ -38,7 +38,7 @@ public class TaskService : ITaskService
             Description = dto.Description,
             Deadline = dto.Deadline,
             Priority = dto.Priority,
-            Status = TaskItemStatus.Todo,
+            Status = dto.Status,
             RoadmapId = dto.RoadmapId,
             CreatedAt = now,
             UpdatedAt = now
