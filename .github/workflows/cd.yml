@@ -18,11 +18,13 @@ jobs:
 
       - name: Deploy via SSH
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          SSHPASS: ${{ secrets.VPS_PASSWORD }}
         run: |
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" << 'DEPLOY_SCRIPT'
+          HOST=$(echo "${{ secrets.VPS_HOST }}" | tr -d '[:space:]')
+          USER=$(echo "${{ secrets.VPS_USER }}" | tr -d '[:space:]')
+          echo "Connecting to ${USER}@${HOST}"
+          sshpass -e ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${USER}@${HOST}" bash -s << 'DEPLOY_SCRIPT'
+            set -e
             cd /root/BeOnTime
 
             echo "=== Pulling latest changes ==="
