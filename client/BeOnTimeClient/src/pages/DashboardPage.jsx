@@ -7,6 +7,7 @@ import { ideaService } from '../services/ideaService';
 import { roadmapService } from '../services/roadmapService';
 
 export const DashboardPage = () => {
+  console.log("CD");
   const { user } = useAuth();
   const navigate = useNavigate();
   const [allTasks, setAllTasks] = useState([]);
