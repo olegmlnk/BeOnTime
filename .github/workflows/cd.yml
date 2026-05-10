@@ -1,0 +1,40 @@
+name: CD — Deploy to VPS
+
+on:
+  workflow_run:
+    workflows: ["CI — Tests"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /root/BeOnTime
+            
+            echo "=== Pulling latest changes ==="
+            git pull origin main
+            
+            echo "=== Rebuilding and restarting services ==="
+            docker compose up -d --build
+            
+            echo "=== Waiting for services to start ==="
+            sleep 15
+            
+            echo "=== Reloading nginx (pick up any config changes) ==="
+            docker compose exec frontend nginx -s reload || true
+            
+            echo "=== Service status ==="
+            docker compose ps
+            
+            echo "=== Deploy complete! ==="
