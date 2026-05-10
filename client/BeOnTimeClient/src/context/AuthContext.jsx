@@ -64,11 +64,14 @@ export const AuthProvider = ({ children }) => {
       });
       return data;
     } catch (error) {
-      console.warn("Backend unavailable or error occurred, using mock login.", error);
-      const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZXhwIjo5OTk5OTk5OTk5fQ.mock_signature";
-      setTokens(fakeToken, fakeToken);
-      setUser({ id: '123', email, name: email.split('@')[0] });
-      return { accessToken: fakeToken };
+      if (import.meta.env.DEV) {
+        console.warn("Backend unavailable or error occurred, using mock login.", error);
+        const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZXhwIjo5OTk5OTk5OTk5fQ.mock_signature";
+        setTokens(fakeToken, fakeToken);
+        setUser({ id: '123', email, name: email.split('@')[0] });
+        return { accessToken: fakeToken };
+      }
+      throw error;
     }
   };
 
@@ -85,11 +88,14 @@ export const AuthProvider = ({ children }) => {
       }
       return data;
     } catch (error) {
-      console.warn("Backend unavailable or error occurred, using mock register.", error);
-      const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZXhwIjo5OTk5OTk5OTk5fQ.mock_signature";
-      setTokens(fakeToken, fakeToken);
-      setUser({ id: '123', email, name: userName });
-      return { accessToken: fakeToken };
+      if (import.meta.env.DEV) {
+        console.warn("Backend unavailable or error occurred, using mock register.", error);
+        const fakeToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJuYW1lIjoiVGVzdCBVc2VyIiwiZXhwIjo5OTk5OTk5OTk5fQ.mock_signature";
+        setTokens(fakeToken, fakeToken);
+        setUser({ id: '123', email, name: userName });
+        return { accessToken: fakeToken };
+      }
+      throw error;
     }
   };
 
