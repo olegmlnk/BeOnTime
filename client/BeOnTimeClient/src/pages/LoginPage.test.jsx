@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LoginPage } from './LoginPage';
 import { AuthContext } from '../context/AuthContext';
+import { ThemeContext } from '../context/ThemeContext';
 import { BrowserRouter } from 'react-router-dom';
 
 // Мокаємо хук useNavigate з react-router-dom
@@ -26,9 +27,11 @@ describe('LoginPage Component', () => {
     const renderWithProviders = () => {
         return render(
             <BrowserRouter>
-                <AuthContext.Provider value={{ login: mockLogin }}>
-                    <LoginPage />
-                </AuthContext.Provider>
+                <ThemeContext.Provider value={{ theme: 'light', toggleTheme: vi.fn() }}>
+                    <AuthContext.Provider value={{ login: mockLogin }}>
+                        <LoginPage />
+                    </AuthContext.Provider>
+                </ThemeContext.Provider>
             </BrowserRouter>
         );
     };

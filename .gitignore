@@ -17,6 +17,7 @@ pnpm-debug.log*
 # IDEs and Tools
 .idea/
 .vscode/
+.claude/
 *.suo
 *.userprefs
 *.ideocoverage
