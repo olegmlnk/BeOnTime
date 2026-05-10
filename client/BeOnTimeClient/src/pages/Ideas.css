@@ -1,0 +1,233 @@
+/* ── IDEAS PAGE ── */
+.ideas-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.ideas-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.ideas-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.ideas-header p {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* ── QUICK INPUT FORM ── */
+.quick-input-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.quick-input-box {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--card-border);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+}
+
+.quick-input-box.focused {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.quick-input-title {
+  width: 100%;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: transparent;
+  outline: none;
+}
+
+.quick-input-title::placeholder {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.quick-input-desc {
+  width: 100%;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: transparent;
+  outline: none;
+  resize: none;
+  margin-top: 12px;
+  min-height: 80px;
+}
+
+.quick-input-desc::placeholder {
+  color: var(--text-secondary);
+}
+
+.quick-input-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.btn-save-idea {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent), var(--cyan) 30%));
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: box-shadow var(--transition), transform var(--transition);
+  font-family: inherit;
+}
+
+.btn-save-idea:hover {
+  box-shadow: var(--shadow-accent);
+  transform: translateY(-1px);
+}
+
+.btn-save-idea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── MASONRY GRID ── */
+.ideas-masonry {
+  column-count: 3;
+  column-gap: 20px;
+  padding-bottom: 40px;
+}
+
+@media (max-width: 1100px) {
+  .ideas-masonry {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .ideas-masonry {
+    column-count: 1;
+  }
+}
+
+/* ── STICKER IDEA CARD ── */
+.sticker-card {
+  break-inside: avoid;
+  margin-bottom: 20px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
+  position: relative;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Subtle accent tints for variety */
+.sticker-card:nth-child(4n+1) { 
+  border-left: 3px solid var(--accent);
+}
+.sticker-card:nth-child(4n+2) { 
+  border-left: 3px solid var(--cyan);
+}
+.sticker-card:nth-child(4n+3) { 
+  border-left: 3px solid var(--warning);
+}
+.sticker-card:nth-child(4n+4) { 
+  border-left: 3px solid var(--success);
+}
+
+.sticker-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-hover);
+}
+
+.sticker-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.sticker-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex-grow: 1;
+  white-space: pre-wrap;
+}
+
+.sticker-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.sticker-card:hover .sticker-actions {
+  opacity: 1;
+}
+
+.btn-icon {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-icon:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  transform: scale(1.05);
+}
+
+.btn-icon.convert:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: var(--cyan-pale);
+  box-shadow: var(--shadow-cyan);
+}
+
+.btn-icon.delete:hover {
+  color: var(--error);
+  border-color: var(--error);
+  background: var(--error-pale);
+}

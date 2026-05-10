@@ -1,0 +1,245 @@
+/* ── PROFILE PAGE ── */
+.profile-page {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.profile-page-header {
+  margin-bottom: 40px;
+}
+
+.profile-page-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.profile-page-header p {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* ── USER INFO CARD ── */
+.profile-info-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-accent);
+}
+
+.profile-avatar span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.profile-user-details h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.profile-user-details .profile-email {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.profile-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.profile-role-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background-color: var(--accent-pale);
+  color: var(--accent);
+}
+
+.profile-date-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background-color: var(--border);
+  color: var(--text-secondary);
+}
+
+/* ── SETTINGS SECTIONS ── */
+.profile-section {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
+  margin-bottom: 24px;
+}
+
+.profile-section.danger {
+  border-color: var(--error);
+  border-style: solid;
+  border-width: 1px;
+}
+
+.profile-section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-section-title svg {
+  color: var(--accent);
+}
+
+.profile-section.danger .profile-section-title svg {
+  color: var(--error);
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.profile-field:last-child {
+  margin-bottom: 0;
+}
+
+.profile-field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.profile-field-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.profile-field-row .form-input {
+  flex: 1;
+}
+
+.btn-save-field {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent), var(--cyan) 30%));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.btn-save-field:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-accent);
+}
+
+.btn-save-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── PASSWORD FORM ── */
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.password-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* ── DANGER ZONE ── */
+.danger-description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.btn-danger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid var(--error);
+  border-radius: var(--radius-sm);
+  color: var(--error);
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-danger:hover {
+  background: var(--error-pale);
+  transform: translateY(-1px);
+}
+
+/* ── STATUS MESSAGE ── */
+.profile-message {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  animation: fadeIn 0.2s forwards;
+}
+
+.profile-message.success {
+  background: var(--success-pale);
+  color: var(--success);
+  border: 1px solid rgba(0, 184, 148, 0.2);
+}
+
+.profile-message.error {
+  background: var(--error-pale);
+  color: var(--error);
+  border: 1px solid rgba(225, 112, 85, 0.2);
+}
